@@ -1,12 +1,61 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io">
+      <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+    </a>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+</nav>
 <section class="hero is-primary">
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
-        Primary title
+        Tweets App
       </h1>
       <h2 class="subtitle">
-        Primary subtitle
+        GSWAI
       </h2>
     </div>
   </div>
 </section>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Section</h1>
+    <h2 class="subtitle">
+      A simple container to divide your page into <strong>sections</strong>, like the one you're currently reading
+    </h2>
+      <app-tweets></app-tweets>
+  </div>
+</section>
+
+
+<!--
+<clr-main-container>
+  <clr-header class="header-4">
+    <div class="branding">
+      <a class="nav-link">
+        <div class="title">Twangular</div>
+      </a>
+    </div>
+    <div class="header-actions" *ngIf="user">
+      <a class="nav-link">
+        <span class="nav-text">
+          <img [src]="user.profile_image_url_https" class="avatar" />
+          @{{user.screen_name}}
+        </span>
+      </a>
+    </div>
+  </clr-header>
+  <div class="content-container">
+    <main class="content-area">
+      <app-tweets></app-tweets>
+    </main>
+  </div>
+</clr-main-container>
+-->
