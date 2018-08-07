@@ -8,6 +8,7 @@ import { TweetComponent } from './tweet/tweet.component';
 import { TweetsComponent } from './tweets/tweets.component';
 import { TweetPipe } from './tweet.pipe';
 import { MomentModule } from 'angular2-moment';
+import { HashtagsComponent } from './hashtags/hashtags.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { MomentModule } from 'angular2-moment';
     TweetComponent,
     TweetsComponent,
     TweetPipe,
+    HashtagsComponent,
   ],
   imports: [
     BrowserModule,

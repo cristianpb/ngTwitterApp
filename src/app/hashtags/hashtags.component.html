@@ -1,0 +1,23 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Hashtag </th>
+      <th>Value </th>
+      <th>Progress </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let tag of hashtags">
+      <td>
+        {{ tag.hashtag }}
+      </td>
+      <td>
+        {{ tag.value }}
+      </td>
+      <td>
+        <progress class="progress" value="{{ tag.value }}" max="{{ max_hashtags }}"></progress>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

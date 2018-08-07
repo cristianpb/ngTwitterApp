@@ -20,4 +20,8 @@ export class TwitterService {
   stream() {
     return this.http.get<TwitterResponse>(`${environment.api}/stream`);
   }
+
+  hashtags() {
+    return this.http.get<TwitterResponse>(`${environment.api}/stream/hashtag`);
+  }
 }
