@@ -27,7 +27,7 @@ app.get('/api/tweets/:page', (req, res) => {
 });
 
 app.get('/api/stream/hashtag', (req, res) => {
-  Hashtag.find({},{},{limit:9}).exec(function (err, docs) {
+  Hashtag.find({"label":{"$in":["#Paris","#France","#sports"]}},{},{}).sort({value: 'desc'}).limit(9).exec(function (err, docs) {
     res.json({'data': docs});
   });
 });

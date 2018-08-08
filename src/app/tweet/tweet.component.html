@@ -1,22 +1,25 @@
 <div class="card">
   <div class="card-image" *ngIf="hasPhoto(tweet)">
     <figure class="image is-4by3">
-      <img [src]="tweet.entities?.media[0].media_url_https" (click)="media = true" />
+      <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
     </figure>
   </div>
   <div class="card-content">
     <div class="media">
       <div class="media-left">
-        <figure class="image is-48x48" (click)="media = true">
-          <img [src]="tweet.user.profile_image_url_https" class="User image" (click)="media = true"/>
+        <figure class="image is-48x48">
+          <a (click)="toggleModal()">
+            <img [src]="tweet.user.profile_image_url_https" class="User image"/>
+          </a>
         </figure>
       </div>
       <div class="media-content">
+        <a (click)="toggleModal()">
         <p class="title is-4">{{ tweet.user.name }}</p>
-        <p class="subtitle is-6">{{ tweet.user.screen_name }}</p>
+        <p class="subtitle is-6">@{{ tweet.user.screen_name }}</p>
+        </a>
       </div>
     </div>
-
     <div class="content">
       {{ tweet.text }}
       <div *ngIf="hasHashtags(tweet)">
@@ -25,7 +28,72 @@
         </div>
       </div>
       <br>
-      <time datetime="2016-1-1">{{ tweet.created_at |  amTimeAgo}}</time>
+      <!--
+      <time datetime="{{ '01/05/2017' | amParse:'DD/MM/YYYY' | amDateFormat:'YYYY-MM-DD' }}">{{ tweet.created_at |  amTimeAgo}}</time>
+      -->
+      <time datetime="2016-1-1">{{ tweet.created_at | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</time>
     </div>
+  </div>
+</div>
+
+
+
+<div class="modal" [ngClass]="{ 'is-active' : media }">
+  <div class="modal-background" (click)="toggleModal()"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <div class="container">
+        
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <a (click)="toggleModal()">
+                  <img [src]="tweet.user.profile_image_url_https" class="User image"/>
+                </a>
+              </figure>
+            </div>
+            <div class="media-content">
+              <a (click)="toggleModal()">
+                <p class="title is-4">{{ tweet.user.name }}</p>
+                <p class="subtitle is-6">@{{ tweet.user.screen_name }}</p>
+              </a>
+            </div>
+            <div class="media-right">
+              <button class="delete" aria-label="close" (click)="toggleModal()"></button>
+            </div>
+          </div>
+      </div>
+    </header>
+    <section class="modal-card-body">
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            {{ tweet.text }}
+            <div *ngIf="hasHashtags(tweet)">
+              <div *ngFor="let tag of tweet.hashtags" >
+                <span class="tag">{{ tag }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-image" *ngIf="hasPhoto(tweet)">
+          <figure class="image">
+            <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
+          </figure>
+        </div>
+        <footer class="card-footer">
+          <p class="card-footer-item">
+            <time datetime="2016-1-1">{{ tweet.created_at |  amTimeAgo}}</time>
+          </p>
+          <p class="card-footer-item">
+            <span>
+              See it on <a href="https://twitter.com/{{ tweet.user.screen_name}}/status/{{ tweet.id_str }}">
+                Twitter
+                </a>
+            </span>
+          </p>
+        </footer>
+      </div>
+    </section>
   </div>
 </div>

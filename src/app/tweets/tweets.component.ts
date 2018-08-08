@@ -13,12 +13,13 @@ export class TweetsComponent implements OnInit, OnDestroy {
   ids = [];
   timer;
   since = '';
+  currentPage = 0;
 
   constructor(private twitter: TwitterService) {}
 
   ngOnInit() {
     this.getStream();
-    //this.timer = setInterval(() => this.getStream(), 61000);
+    this.timer = setInterval(() => this.getStream(), 61000);
   }
 
   ngOnDestroy() {
@@ -27,14 +28,16 @@ export class TweetsComponent implements OnInit, OnDestroy {
     }
   }
 
-  nextPage(NextPage) {
+  nextPage() {
     this.twitter.page++;
+    this.currentPage++;
     this.getStream();
   }
 
-  previousPage(NextPage) {
+  previousPage() {
     if (this.twitter.page > 0) {
       this.twitter.page--;
+      this.currentPage--;
       this.getStream();
     }
   }

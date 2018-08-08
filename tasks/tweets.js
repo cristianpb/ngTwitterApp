@@ -25,49 +25,8 @@ stream.on('tweet', function (tweet) {
   // Create a new model instance with our object
   var tweetEntry = new Tweet(tweet);
 
-  MongoClient.connect(url, { useNewUrlParser: true }).then((client) => {
-    const db = client.db('ng-tweets')
-    var collection = db.collection('tweets')
-    collection.insertOne(tweet)
-      .then(() => {
-        let reg = /\s([@#][\w_-]+)/g;
-        console.log(tweet.text);
-        console.log(tweet.text.match(reg));
-        var hashtags = tweet.text.match(reg);
-        if (hashtags.length) {
-          if (hashtags.length > 0) {
-            hashtags.forEach(tag => {
-              db.collection('hashtags')
-                .find({ 'hashtag' : tag }).toArray()
-                .then(docs => {
-                  if ( docs.length === 0 ) {
-                    console.log('Zero');
-                    db.collection('hashtags').insert({'hashtag': tag, "value": 1})
-                  } else {
-                    console.log('Updating');
-                    db.collection('hashtags').findOneAndUpdate(
-                      { 'hashtag' : tag },
-                      { $inc: { "value" : 1 }}
-                    ).then( (res) => console.log('updated', res))
-                     .catch((err) => console.log(err))
-                    db.collection('tweets').findOneAndUpdate(
-                      {"id_str": tweet.id_str} ,
-                      { $set: { "hashtags": hashtags }}
-                    )
-                      .then( res => console.log('Updated', res))
-                      .catch( err => console.log(err))
-                  }
-                })
-            })
-          }
-        }
-      })
-    .catch(err => console.log(err))
-  // Save 'er to the database
-  //tweetEntry.save(function (err) {
-  //  if (err) console.log('Err', err);
-  //  console.log(tweet.created_at);
-  });
+  saveTweets(url, tweet)
+
 })
 
 stream.on('limit', function (limitMessage) {
@@ -86,3 +45,49 @@ stream.on('reconnect', function (request, response, connectInterval) {
 stream.on('disconnect', function (disconnectMessage) {
   console.log('disconnect', disconnectMessage);
 });
+
+async function saveTweets (url, tweet) {
+  let client = await MongoClient.connect(url, { useNewUrlParser: true,  wtimeout: 0 })
+  const db = await client.db('ng-tweets')
+  const collection = await db.collection('tweets')
+  const msg2 = await collection.insertOne(tweet)
+  console.log('----- Start -----');
+  const msg3 = await saveHashtag(tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag', db)
+  const msg4 = await saveHashtag(tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'user_count', db)
+  console.log('----- End ------');
+}
+
+
+async function saveHashtag (tweet, reg, type, db) {
+  let text = await ('extended_tweet' in tweet) ? tweet.extended_tweet.full_text : tweet.text
+  let hashtags = await text.match(reg);
+  console.log(text);
+  console.log(hashtags);
+  if (hashtags) {
+    if (hashtags.length > 0) {
+      hashtags.forEach(tag => processHashtag(db, tag, hashtags, type, tweet))
+    }
+  }
+}
+
+
+async function processHashtag (db, tag, hashtags, type, tweet) {
+  let docs = await db.collection('hashtags')
+    .find({'label': tag , 'type': type})
+    .toArray()
+  if ( docs.length === 0 ) {
+    let res1 = db.collection('hashtags').insert({'type': type, 'label': tag, 'value': 1})
+    console.log('Creating tag: ', tag);
+  } else {
+    await db.collection('hashtags').findOneAndUpdate(
+      { 'label': tag, 'type': type },
+      { $inc: { "value" : 1 }}
+    ).catch(err => console.log('Hash update error', err))
+    console.log('updated hashtag')
+  }
+    await db.collection('tweets').findOneAndUpdate(
+      {"id_str": tweet.id_str},
+      { $set: { "hashtags": hashtags }}
+    ).catch(err => console.log('Tweet update error', err))
+    console.log('updated tweet')
+}

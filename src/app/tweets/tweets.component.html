@@ -1,8 +1,8 @@
 <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
-  <a class="pagination-previous" (click)="previousPage()"> Previous </a>
+  <a class="pagination-previous" (click)="previousPage()">Previous</a>
   <a (click)="nextPage()" class="pagination-next">Next page</a>
   <ul class="pagination-list">
-    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">{{ twitter.page }}</a></li>
+    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">{{ currentPage }}</a></li>
   </ul>
 </nav>
 <br>

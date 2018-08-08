@@ -7,7 +7,7 @@ import { Tweet } from '../tweet';
   styleUrls: ['./tweet.component.scss']
 })
 export class TweetComponent {
-  media = false;
+  media: boolean = false;
   @Input() tweet: Tweet;
   @Input() retweet: Tweet;
   @Output() action = new EventEmitter<{property: string, tweet: Tweet}>();
@@ -20,6 +20,11 @@ export class TweetComponent {
       }
     }
     return false;
+  }
+
+  toggleModal() {
+    console.log(this.media);
+    this.media = !this.media;
   }
 
   hasHashtags(tweet: Tweet) {

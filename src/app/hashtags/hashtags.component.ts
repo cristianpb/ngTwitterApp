@@ -27,13 +27,15 @@ export class HashtagsComponent implements OnInit, OnDestroy {
 
   getHashtags() {
     this.twitter.hashtags().subscribe(hashtags => {
-      hashtags.data.forEach(hashtag => {
+      hashtags.data.reverse().forEach(hashtag => {
         if (this.ids.indexOf(hashtag._id) < 0) {
           this.ids.push(hashtag._id);
           if (hashtag.value > this.max_hashtags) {
             this.max_hashtags = hashtag.value
           }
           this.hashtags.unshift(hashtag)
+        } else {
+          this.hashtags[this.ids.indexOf(hashtag._id)] = hashtag
         }
       });
     });
