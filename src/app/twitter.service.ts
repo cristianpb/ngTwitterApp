@@ -11,6 +11,7 @@ export interface TwitterResponse {
 @Injectable()
 export class TwitterService {
 
+  page: number = 0;
   constructor(private http: HttpClient) { }
 
   // action(property: 'favorite'|'retweet', id: string, state: boolean) {
@@ -18,7 +19,7 @@ export class TwitterService {
   // }
 
   stream() {
-    return this.http.get<TwitterResponse>(`${environment.api}/stream`);
+    return this.http.get<TwitterResponse>(`${environment.api}/tweets/${this.page}`);
   }
 
   hashtags() {

@@ -10,6 +10,7 @@ import { TwitterService } from '../twitter.service';
 export class HashtagsComponent implements OnInit, OnDestroy {
   hashtags: Hashtag[] = [];
   constructor(private twitter: TwitterService) {}
+  ids = [];
   timer;
   max_hashtags = 0;
 
@@ -27,10 +28,13 @@ export class HashtagsComponent implements OnInit, OnDestroy {
   getHashtags() {
     this.twitter.hashtags().subscribe(hashtags => {
       hashtags.data.forEach(hashtag => {
-        if (hashtag.value > this.max_hashtags) {
-          this.max_hashtags = hashtag.value
+        if (this.ids.indexOf(hashtag._id) < 0) {
+          this.ids.push(hashtag._id);
+          if (hashtag.value > this.max_hashtags) {
+            this.max_hashtags = hashtag.value
+          }
+          this.hashtags.unshift(hashtag)
         }
-        this.hashtags.unshift(hashtag)
       });
     });
   }

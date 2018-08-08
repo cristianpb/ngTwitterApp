@@ -7,8 +7,8 @@
   <div class="card-content">
     <div class="media">
       <div class="media-left">
-        <figure class="image is-48x48">
-          <img [src]="tweet.user.profile_image_url_https" class="User image" />
+        <figure class="image is-48x48" (click)="media = true">
+          <img [src]="tweet.user.profile_image_url_https" class="User image" (click)="media = true"/>
         </figure>
       </div>
       <div class="media-content">
@@ -19,10 +19,10 @@
 
     <div class="content">
       {{ tweet.text }}
-      <div ng-repeat="emp in tweet.hashtags" *ngIf="hasHashtags(tweet)"><a href="/" target="/">{{ emp }}</a>
-      </div>
       <div *ngIf="hasHashtags(tweet)">
-        {{ tweet.hashtags }}
+        <div *ngFor="let tag of tweet.hashtags" >
+          <span class="tag">{{ tag }}</span>
+        </div>
       </div>
       <br>
       <time datetime="2016-1-1">{{ tweet.created_at |  amTimeAgo}}</time>

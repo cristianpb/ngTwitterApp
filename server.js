@@ -20,8 +20,8 @@ app.get('/', (req,res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'))
 });
 
-app.get('/api/stream', (req, res) => {
-  Tweet.getTweets(0,0, function(tweets, pages) {
+app.get('/api/tweets/:page', (req, res) => {
+  Tweet.getTweets(req.params.page, 0, function (tweets, pages) {
     res.json({'data': tweets});
   });
 });

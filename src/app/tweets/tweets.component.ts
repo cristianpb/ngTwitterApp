@@ -18,12 +18,24 @@ export class TweetsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getStream();
-    this.timer = setInterval(() => this.getStream(), 61000);
+    //this.timer = setInterval(() => this.getStream(), 61000);
   }
 
   ngOnDestroy() {
     if (this.timer) {
       clearInterval(this.timer);
+    }
+  }
+
+  nextPage(NextPage) {
+    this.twitter.page++;
+    this.getStream();
+  }
+
+  previousPage(NextPage) {
+    if (this.twitter.page > 0) {
+      this.twitter.page--;
+      this.getStream();
     }
   }
 
@@ -41,9 +53,9 @@ export class TweetsComponent implements OnInit, OnDestroy {
   }
 
   cleanUp() {
-    if (this.tweets.length > 1000) {
-      this.tweets.splice(1000);
-      this.ids.splice(1000);
+    if (this.tweets.length > 9) {
+      this.tweets.splice(9);
+      this.ids.splice(9);
     }
   }
 

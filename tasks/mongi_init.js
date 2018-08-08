@@ -6,11 +6,16 @@ var url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/n
 
 MongoClient.connect(url, { useNewUrlParser: true }).then(client => {
   const db = client.db('ng-tweets')
-  var collection = db.collection('tweets')
-  collection.createIndex( { "id_str": 1}, { unique: true } )
-    .then(msj => {
-      console.log(msj)
-      client.close()
-    })
-    .catch(err => console.log(err))
+  db.dropCollection('tweets')
+    .then(msg => {
+      var collection = db.collection('tweets')
+      collection.createIndex( { "id_str": 1}, { unique: true } )
+        .then(msj => {
+          console.log(msj)
+          client.close()
+        })
+        .catch(err => console.log(err))
+    }
+    )
+    .catch(err => console.log(err));
 })
