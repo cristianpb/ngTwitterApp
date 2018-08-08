@@ -1,8 +1,9 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
-      <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+    <a class="navbar-item" href="/">
+      <img src="/assets/images/logo_small.svg" alt="Logo GSWAI">
     </a>
+
 
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
       <span aria-hidden="true"></span>
@@ -10,7 +11,23 @@
       <span aria-hidden="true"></span>
     </a>
   </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="#" target="_blank">Global SWAI</a>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <a class="bd-tw-button button" href="#">
+          <div style="text-align:center">
+            <fa-icon [icon]="faTwitter"></fa-icon>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 </nav>
+
 <section class="hero is-primary">
   <div class="hero-body">
     <div class="container">

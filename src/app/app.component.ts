@@ -1,6 +1,7 @@
 import { Component , OnInit} from '@angular/core';
 import { TwitterService } from './twitter.service';
 import { Tweet } from './tweet';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import { Tweet } from './tweet';
   providers: [TwitterService]
 })
 export class AppComponent implements OnInit {
+  faTwitter = faTwitter;
 
   constructor(private twitter: TwitterService) {}
 
