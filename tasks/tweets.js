@@ -1,5 +1,6 @@
 var Twit = require('twit');
 var colors = require('colors'); 
+var moment = require('moment');
 
 var T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -21,13 +22,13 @@ var stream = T.stream('statuses/filter', {
 });
 
 stream.on('tweet', function (tweet) {
-  // Construct a new tweet object
-
-  // Create a new model instance with our object
-  var tweetEntry = new Tweet(tweet);
-
-  saveTweets(url, tweet)
-
+  if ('retweeted_status' in tweet) {
+    //var tweetEntry = new Tweet(tweet.retweeted_status);
+    saveTweets(url, tweet.retweeted_status)
+  } else {
+    //var tweetEntry = new Tweet(tweet);
+    saveTweets(url, tweet)
+  }
 })
 
 stream.on('limit', function (limitMessage) {
@@ -48,6 +49,8 @@ stream.on('disconnect', function (disconnectMessage) {
 });
 
 async function saveTweets (url, tweet) {
+  //console.log(moment('Mon Aug 06 12:04:08 +0000 2018','ddd MMM DD HH:mm:ss Z YYYY').valueOf())
+  tweet = await Object.assign(tweet, {'timestamp_ms': moment(tweet.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').valueOf()});
   let client = await MongoClient.connect(url, { useNewUrlParser: true,  wtimeout: 0 }).catch( async function(err) {
     console.log('Error: ');
     console.log(err)
@@ -59,10 +62,11 @@ async function saveTweets (url, tweet) {
   console.time(colors.magenta(tweet.id_str));
   const db = await client.db('ng-tweets')
   const collection = await db.collection('tweets')
-  const msg2 = await collection.insertOne(tweet)
-  const msg3 = await saveHashtag(tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag', db)
-  const msg4 = await saveHashtag(tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'user_count', db)
-  console.timeEnd(colors.magenta(tweet.id_str));
+  collection.insertOne(tweet)
+    .then(saveMetadata(tweet, db))
+    .catch(err => {
+      console.log(err);
+    })
 }
 
 
@@ -97,6 +101,12 @@ async function processHashtag (db, tag, hashtags, type, tweet) {
       { $set: { "hashtags": hashtags }}
     ).catch(err => console.log('Tweet update error', err))
     console.log('updated tweet')
+}
+
+async function saveMetadata (tweet, db) {
+  const msg3 = await saveHashtag(tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag', db)
+  const msg4 = await saveHashtag(tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'user_count', db)
+  console.timeEnd(colors.magenta(tweet.id_str));
 }
 
 function sleep(ms) {

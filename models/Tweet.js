@@ -71,7 +71,7 @@ schema.statics.getTweets = function(page, skip, callback) {
       start = (page * 9) + (skip * 1);
 
   // Query the db, using skip and limit to achieve page chunks
-  Tweet.find({},{},{skip: start}).sort({timestamp_ms : 'asc'}).collation({locale: "en_US", numericOrdering: true}).limit(9).exec(function(err,docs){
+  Tweet.find({},{},{skip: start}).sort({timestamp_ms : 'desc'}).collation({locale: "en_US", numericOrdering: true}).limit(9).exec(function(err,docs){
 
     // If everything is cool...
     if(!err) {

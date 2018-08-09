@@ -23,7 +23,6 @@ export class TweetComponent {
   }
 
   toggleModal() {
-    console.log(this.media);
     this.media = !this.media;
   }
 
