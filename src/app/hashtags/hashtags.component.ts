@@ -37,6 +37,9 @@ export class HashtagsComponent implements OnInit, OnDestroy {
         } else {
           this.hashtags[this.ids.indexOf(hashtag._id)] = hashtag
         }
+        this.hashtags.sort(function (a, b) {
+          return b.value - a.value;
+        });
       });
     });
   }

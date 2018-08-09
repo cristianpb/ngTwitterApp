@@ -1,23 +1,15 @@
 <table class="table">
-  <thead>
-    <tr>
-      <th>Hashtag </th>
-      <th>Value </th>
-      <th>Progress </th>
-    </tr>
-  </thead>
   <tbody>
     <tr *ngFor="let tag of hashtags">
       <td>
         {{ tag.label }}
       </td>
       <td>
-        {{ tag.value }}
+        <progress class="progress is-primary" value="{{ tag.value }}" max="{{ max_hashtags }}"></progress>
       </td>
       <td>
-        <progress class="progress" value="{{ tag.value }}" max="{{ max_hashtags }}"></progress>
+        {{ tag.value }}
       </td>
     </tr>
   </tbody>
 </table>
-

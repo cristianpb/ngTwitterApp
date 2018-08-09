@@ -1,45 +1,96 @@
-<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+<nav class="navbar is-primary">
   <div class="navbar-brand">
-    <a class="navbar-item" href="/">
-      <img src="/assets/images/logo_small.svg" alt="Logo GSWAI">
-    </a>
+    <div class="navbar-item" href="https://bulma.io">
+      <a href="/">
+        <img src="/assets/images/logo_small.svg" alt="GSWAI" width="100" height="200">
+      </a>
+    </div>
 
-
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
+    <div class="navbar-burger burger" [ngClass]="{ 'is-active' : burger }" (click)="toggleBurger()" data-target="navbarExampleTransparentExample">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
 
-  <div class="navbar-menu">
+  <div id="navbarExampleTransparentExample" class="navbar-menu" [ngClass]="{ 'is-active' : burger }" (click)="toggleBurger()">
     <div class="navbar-start">
-      <a class="navbar-item" href="#" target="_blank">Global SWAI</a>
+      <a class="navbar-item" href="/">
+        Global SWAI
+      </a>
     </div>
+
     <div class="navbar-end">
+      <a class="navbar-item is-link" href="/#about">
+        Get involved
+      </a>
+
+      <a class="navbar-item" href="/gswai2017">
+        GSWAI 2017
+      </a>
+
+      <!--
+      <a class="navbar-item" href="/team">
+        Team
+      </a>
+      -->
+
       <div class="navbar-item">
-        <a class="bd-tw-button button" href="#">
-          <div style="text-align:center">
-            <fa-icon [icon]="faTwitter"></fa-icon>
-          </div>
-        </a>
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="bd-tw-button button" href="#">
+              <div style="text-align:center">
+                <fa-icon [icon]="faTwitter"></fa-icon>
+              </div>
+            </a>
+          </p>
+          <p class="control">
+            <a class="bd-tw-button button" href="#">
+              <div style="text-align:center">
+                <fa-icon [icon]="faFacebook"></fa-icon>
+              </div>
+            </a>
+          </p>
+          <p class="control">
+            <a class="bd-tw-button button" href="#">
+              <div style="text-align:center">
+                <fa-icon [icon]="faInstagram"></fa-icon>
+              </div>
+            </a>
+          </p>
+        </div>
       </div>
+
     </div>
   </div>
 </nav>
 
+
+
+
+
+
+
+
 <section class="hero is-primary">
   <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        Tweets App
-      </h1>
-      <h2 class="subtitle">
-        GSWAI
-      </h2>
+    <div class="container is-fullhd">
+      <nav class="level">
+        <div class="level-left">
+          <figure class="image">
+            <img src="/assets/images/banner1.jpg">
+          </figure>
+        </div>
+        <div class="level-right">
+          <figure class="image">
+            <img src="/assets/images/banner2.svg" width="300" height="200">
+          </figure>
+        </div>
+      </nav>
     </div>
   </div>
 </section>
+
 
 <section class="section">
   <div class="container">
@@ -50,9 +101,6 @@
       </div>
       <div class="column">
         <h1 class="title">Tweets</h1>
-        <h2 class="subtitle">
-          A simple container to divide your page into <strong>sections</strong>, like the one you're currently reading
-        </h2>
         <app-tweets></app-tweets>
       </div>
     </div>

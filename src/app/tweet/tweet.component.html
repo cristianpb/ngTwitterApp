@@ -22,10 +22,6 @@
     </div>
     <div class="content">
       {{ tweet.text }}
-      <div class="tags" *ngIf="hasHashtags(tweet)">
-        <span class="tag" *ngFor="let tag of tweet.hashtags">{{ tag }}</span>
-      </div>
-      <br>
       <!--
       <time datetime="{{ '01/05/2017' | amParse:'DD/MM/YYYY' | amDateFormat:'YYYY-MM-DD' }}">{{ tweet.created_at |  amTimeAgo}}</time>
       -->

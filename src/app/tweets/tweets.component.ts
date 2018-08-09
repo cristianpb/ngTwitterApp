@@ -19,7 +19,7 @@ export class TweetsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getStream();
-    this.timer = setInterval(() => this.getStream(), 61000);
+    this.timer = setInterval(() => this.getStream(), 1000);
   }
 
   ngOnDestroy() {
