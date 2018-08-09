@@ -1,5 +1,6 @@
 export class Hashtag {
-  hashtag: string;
+  label: string;
+  type: string;
   value: number;
   _id: string;
 }

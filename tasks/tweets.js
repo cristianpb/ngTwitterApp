@@ -1,4 +1,5 @@
 var Twit = require('twit');
+var colors = require('colors'); 
 
 var T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -10,7 +11,7 @@ var T = new Twit({
 var MongoClient = require('mongodb').MongoClient
 var mlab_username = process.env.MLAB_USERNAME
 var mlab_password = process.env.MLAB_PASSWORD
-var url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`
+var url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets?connectTimeoutMS=6000000`
 //var url = 'mongodb://localhost:27017'
 
 var Tweet = require('../models/Tweet');
@@ -47,14 +48,21 @@ stream.on('disconnect', function (disconnectMessage) {
 });
 
 async function saveTweets (url, tweet) {
-  let client = await MongoClient.connect(url, { useNewUrlParser: true,  wtimeout: 0 })
+  let client = await MongoClient.connect(url, { useNewUrlParser: true,  wtimeout: 0 }).catch( async function(err) {
+    console.log('Error: ');
+    console.log(err)
+    await sleep(5000);
+    console.log('Trying to reconnect');
+    let client = await MongoClient.connect(url, { useNewUrlParser: true,  wtimeout: 0 })
+    return client
+  });
+  console.time(colors.magenta(tweet.id_str));
   const db = await client.db('ng-tweets')
   const collection = await db.collection('tweets')
   const msg2 = await collection.insertOne(tweet)
-  console.log('----- Start -----');
   const msg3 = await saveHashtag(tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag', db)
   const msg4 = await saveHashtag(tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'user_count', db)
-  console.log('----- End ------');
+  console.timeEnd(colors.magenta(tweet.id_str));
 }
 
 
@@ -69,7 +77,6 @@ async function saveHashtag (tweet, reg, type, db) {
     }
   }
 }
-
 
 async function processHashtag (db, tag, hashtags, type, tweet) {
   let docs = await db.collection('hashtags')
@@ -90,4 +97,8 @@ async function processHashtag (db, tag, hashtags, type, tweet) {
       { $set: { "hashtags": hashtags }}
     ).catch(err => console.log('Tweet update error', err))
     console.log('updated tweet')
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

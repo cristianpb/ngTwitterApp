@@ -22,16 +22,14 @@
     </div>
     <div class="content">
       {{ tweet.text }}
-      <div *ngIf="hasHashtags(tweet)">
-        <div *ngFor="let tag of tweet.hashtags" >
-          <span class="tag">{{ tag }}</span>
-        </div>
+      <div class="tags" *ngIf="hasHashtags(tweet)">
+        <span class="tag" *ngFor="let tag of tweet.hashtags">{{ tag }}</span>
       </div>
       <br>
       <!--
       <time datetime="{{ '01/05/2017' | amParse:'DD/MM/YYYY' | amDateFormat:'YYYY-MM-DD' }}">{{ tweet.created_at |  amTimeAgo}}</time>
       -->
-      <time datetime="2016-1-1">{{ tweet.created_at | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</time>
+      <p>{{ tweet.created_at | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</p>
     </div>
   </div>
 </div>
@@ -69,10 +67,8 @@
         <div class="card-content">
           <div class="content">
             {{ tweet.text }}
-            <div *ngIf="hasHashtags(tweet)">
-              <div *ngFor="let tag of tweet.hashtags" >
-                <span class="tag">{{ tag }}</span>
-              </div>
+            <div class="tags" *ngIf="hasHashtags(tweet)">
+              <span class="tag" *ngFor="let tag of tweet.hashtags">{{ tag }}</span>
             </div>
           </div>
         </div>
