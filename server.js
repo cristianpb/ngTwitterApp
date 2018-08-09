@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 const Tweet = require('./models/Tweet');
 const Hashtag = require('./models/Hashtag');
+const https = require('https');
+var CronJob = require('cron').CronJob;
 
 const app = express();
 var port = process.env.PORT || 3000; 
@@ -31,5 +33,26 @@ app.get('/api/stream/hashtag', (req, res) => {
     res.json({'data': docs});
   });
 });
+
+var job = new CronJob({
+  //cronTime: '*/5 * * * * * *',
+  cronTime: '*/15 6-23 * * *',
+  onTick: function() {
+    /*
+     * At every 15th minute past every hour from 6 through 23.
+     */
+    https.get(`https://ng-tweet.herokuapp.com/api/stream/hashtag`, (resp) => {
+      resp.on('data', (chunk) => {});
+      // The whole response has been received. Print out the result.
+      resp.on('end', () => {});
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+
+  },
+  start: false,
+  timeZone: 'Europe/Paris'
+});
+job.start();
 
 app.listen(port, '0.0.0.0', () => console.log('Server running'));
