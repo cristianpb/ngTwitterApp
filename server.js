@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const Tweet = require('./models/Tweet');
 const Hashtag = require('./models/Hashtag');
+const Message = require('./models/Message');
 const https = require('https');
 var CronJob = require('cron').CronJob;
 
@@ -31,6 +32,19 @@ app.get('/api/tweets/:page', (req, res) => {
 app.get('/api/stream/hashtag', (req, res) => {
   Hashtag.find({"label":{"$in":["#paris", "#lapaz", "#hongkong", "#sydney", "#carthage", "#bruxelles", "#douala", "#lima", "#istanbul", "#taipei", "#mexico"]}},{},{}).sort({value: 'desc'}).limit(9).exec(function (err, docs) {
     res.json({'data': docs});
+  });
+});
+
+app.get('/api/read', (req, res) => {
+  Message.find({},{},{}).sort({timestamp: 'desc'}).limit(9).exec(function (err, docs) {
+    res.json({'data': docs});
+  });
+});
+
+app.post('/api/write', (req, res) => {
+  Message.create({ message: req.body.message, timestamp: + new Date()}, function (err, small) {
+    if (err) return handleError(err);
+    res.json({'message':'ok'})
   });
 });
 

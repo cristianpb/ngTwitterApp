@@ -27,19 +27,11 @@ export class HashtagsComponent implements OnInit, OnDestroy {
 
   getHashtags() {
     this.twitter.hashtags().subscribe(hashtags => {
-      hashtags.data.reverse().forEach(hashtag => {
-        if (this.ids.indexOf(hashtag._id) < 0) {
-          this.ids.push(hashtag._id);
-          if (hashtag.value > this.max_hashtags) {
-            this.max_hashtags = hashtag.value
-          }
-          this.hashtags.push(hashtag)
-        } else {
-          this.hashtags[this.ids.indexOf(hashtag._id)] = hashtag
+      this.hashtags = hashtags.data;
+      hashtags.data.forEach(hashtag => {
+        if (hashtag.value > this.max_hashtags) {
+            this.max_hashtags = hashtag.value;
         }
-        this.hashtags.sort(function (a, b) {
-          return b.value - a.value;
-        });
       });
     });
   }

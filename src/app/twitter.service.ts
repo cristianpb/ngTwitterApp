@@ -1,11 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { Tweet } from './tweet';
+import { Message } from './message';
 
 export interface TwitterResponse {
   data: any;
   resp: any;
+}
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'responseType': 'text'
+  })
+};
+
+export interface MessagePost {
+  message: any;
 }
 
 @Injectable()
@@ -25,4 +37,9 @@ export class TwitterService {
   hashtags() {
     return this.http.get<TwitterResponse>(`${environment.api}/stream/hashtag`);
   }
+
+  addMessage (message)  {
+    return this.http.post<MessagePost>(`${environment.api}/write`, message, httpOptions);
+  }
+
 }
