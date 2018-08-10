@@ -18,7 +18,7 @@ var url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/n
 var Tweet = require('../models/Tweet');
 
 var stream = T.stream('statuses/filter', {
-  track: 'paris'
+  track: ["#paris", "#lapaz", "#hongkong", "#sydney", "#bruxelles", "#carthage", "#douala", "#lima", "#istanbul", "#taipei", "#mexico"]
 });
 
 stream.on('tweet', function (tweet) {
@@ -83,15 +83,16 @@ async function saveHashtag (tweet, reg, type, db) {
 }
 
 async function processHashtag (db, tag, hashtags, type, tweet) {
+  let norm_tag = await tag.toLowerCase()
   let docs = await db.collection('hashtags')
-    .find({'label': tag , 'type': type})
+    .find({'label': norm_tag , 'type': type})
     .toArray()
   if ( docs.length === 0 ) {
-    let res1 = db.collection('hashtags').insert({'type': type, 'label': tag, 'value': 1})
-    console.log('Creating tag: ', tag);
+    let res1 = db.collection('hashtags').insert({'type': type, 'label': norm_tag, 'value': 1})
+    console.log('Creating tag: ', norm_tag);
   } else {
     await db.collection('hashtags').findOneAndUpdate(
-      { 'label': tag, 'type': type },
+      { 'label': norm_tag, 'type': type },
       { $inc: { "value" : 1 }}
     ).catch(err => console.log('Hash update error', err))
     console.log('updated hashtag')

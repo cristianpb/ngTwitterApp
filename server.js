@@ -29,7 +29,7 @@ app.get('/api/tweets/:page', (req, res) => {
 });
 
 app.get('/api/stream/hashtag', (req, res) => {
-  Hashtag.find({"label":{"$in":["#Paris","#France","#sports"]}},{},{}).sort({value: 'desc'}).limit(9).exec(function (err, docs) {
+  Hashtag.find({"label":{"$in":["#paris", "#lapaz", "#hongkong", "#sydney", "#carthage", "#bruxelles", "#douala", "#lima", "#istanbul", "#taipei", "#mexico"]}},{},{}).sort({value: 'desc'}).limit(9).exec(function (err, docs) {
     res.json({'data': docs});
   });
 });
