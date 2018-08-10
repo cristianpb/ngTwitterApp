@@ -36,7 +36,7 @@ app.get('/api/stream/hashtag', (req, res) => {
 });
 
 app.get('/api/read', (req, res) => {
-  Message.find({},{},{}).sort({timestamp: 'desc'}).limit(9).exec(function (err, docs) {
+  Message.find({},{},{}).sort({timestamp: 'desc'}).limit(3).exec(function (err, docs) {
     res.json({'data': docs});
   });
 });

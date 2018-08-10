@@ -1,7 +1,5 @@
 import { Component , OnInit} from '@angular/core';
 import { TwitterService } from './twitter.service';
-import { Tweet } from './tweet';
-import { Message } from './message';
 import { faTwitter, faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
@@ -20,17 +18,6 @@ export class AppComponent implements OnInit {
 
   toggleBurger() {
     this.burger = !this.burger;
-  }
-
-  add(name: string): void {
-    name = name.trim();
-    if (!name) { return; }
-
-    // The server will generate the id for this new hero
-    const newMessage = {message: name};
-    console.log(name);
-    this.twitter.addMessage(newMessage)
-      .subscribe(message => console.log(message));
   }
 
   ngOnInit() {

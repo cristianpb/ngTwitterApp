@@ -10,6 +10,7 @@ import { TweetPipe } from './tweet.pipe';
 import { MomentModule } from 'angular2-moment';
 import { HashtagsComponent } from './hashtags/hashtags.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TweetsComponent,
     TweetPipe,
     HashtagsComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,

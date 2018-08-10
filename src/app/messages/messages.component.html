@@ -1,0 +1,19 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">Leave us a message</h1>
+    <div class="columns" *ngFor="let message of messages; let i = index">
+      <div class="column">
+      <article class="message">
+        <div class="message-body">
+          {{ message.message }}
+          {{ message.timestamp | amParse: 'x' | amTimeAgo }}
+        </div>
+      </article>
+      </div>
+    </div>
+    <div class="container">
+      <input class="input" type="text"  #heroName>
+      <a class="button" (click)="add(heroName.value); heroName.value=''">Button</a>
+    </div>
+  </div>
+</section>

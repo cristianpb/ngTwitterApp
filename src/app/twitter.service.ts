@@ -42,4 +42,8 @@ export class TwitterService {
     return this.http.post<MessagePost>(`${environment.api}/write`, message, httpOptions);
   }
 
+  getMessage() {
+    return this.http.get<TwitterResponse>(`${environment.api}/read`);
+  }
+
 }
