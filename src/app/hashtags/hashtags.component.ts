@@ -33,7 +33,7 @@ export class HashtagsComponent implements OnInit, OnDestroy {
           if (hashtag.value > this.max_hashtags) {
             this.max_hashtags = hashtag.value
           }
-          this.hashtags.unshift(hashtag)
+          this.hashtags.push(hashtag)
         } else {
           this.hashtags[this.ids.indexOf(hashtag._id)] = hashtag
         }

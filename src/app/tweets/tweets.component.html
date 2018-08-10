@@ -2,14 +2,52 @@
   <a class="pagination-previous" (click)="previousPage()">Previous</a>
   <a (click)="nextPage()" class="pagination-next">Next page</a>
   <ul class="pagination-list">
-    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">{{ currentPage }}</a></li>
+    <li><a class="pagination-link" aria-current="page">{{ currentPage }}</a></li>
   </ul>
 </nav>
 <br>
 
+<div class="tile is-ancestor">
+  <div class="tile is-one-third is-vertical is-parent">
+    <div class="tile is-child box">
+      <app-hashtags></app-hashtags>
+    </div>
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[2]"></app-tweet>
+    </div>
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[5]"></app-tweet>
+    </div>
+  </div>
+  <div class="tile is-one-third is-vertical is-parent">
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[0]"></app-tweet>
+    </div>
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[3]"></app-tweet>
+    </div>
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[6]"></app-tweet>
+    </div>
+  </div>
+  <div class="tile is-vertical is-parent">
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[1]"></app-tweet>
+    </div>
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[4]"></app-tweet>
+    </div>
+    <div class="tile is-child box">
+      <app-tweet [tweet]="tweets[7]"></app-tweet>
+    </div>
+  </div>
+</div>
+
+<!--
 <div class="columns tweets is-multiline">
   <div class="column card is-one-third" *ngFor="let tweet of tweets; let i = index">
     <app-tweet *ngIf="tweet.retweeted_status" [tweet]="tweet.retweeted_status" [retweet]="tweet" (action)="action($event, i)"></app-tweet>
     <app-tweet *ngIf="!tweet.retweeted_status" [tweet]="tweet" (action)="action($event, i)"></app-tweet>
   </div>
 </div>
+-->
