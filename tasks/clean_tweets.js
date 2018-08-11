@@ -11,7 +11,7 @@ async function resetTweets () {
   let db = await client.db('ng-tweets')
   let msg = await db.dropCollection('tweets')
   let collection = await db.collection('tweets')
-  let msg2 = await collection.createIndex( { "id_str": 1}, { unique: true } )
+  let msg2 = await collection.createIndex( { "twid": 1}, { unique: true } )
   console.log('Index Created', msg2);
   let msg4 = await db.dropCollection('hashtags')
   let msg5 = await db.createCollection('hashtags')

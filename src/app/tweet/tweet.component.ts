@@ -13,11 +13,8 @@ export class TweetComponent {
   @Output() action = new EventEmitter<{property: string, tweet: Tweet}>();
 
   hasPhoto(tweet: Tweet) {
-    if ('media' in tweet.entities) {
-      if (tweet.entities.media.length
-        && tweet.entities.media[0].type === 'photo') {
-        return true;
-      }
+    if ('photo' in tweet) {
+      return true;
     }
     return false;
   }

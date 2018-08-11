@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-image" *ngIf="hasPhoto(tweet)">
     <figure class="image is-4by3">
-      <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
+      <img [src]="tweet.photo" (click)="toggleModal()" />
     </figure>
   </div>
   <div class="card-content">
@@ -9,23 +9,23 @@
       <div class="media-left">
         <figure class="image is-48x48">
           <a (click)="toggleModal()">
-            <img [src]="tweet.user.profile_image_url_https" class="User image"/>
+            <img [src]="tweet.avatar" class="User image"/>
           </a>
         </figure>
       </div>
       <div class="media-content">
         <a (click)="toggleModal()">
-        <p class="title is-4">{{ tweet.user.name }}</p>
-        <p class="subtitle is-6">@{{ tweet.user.screen_name }}</p>
+        <p class="title is-4">{{ tweet.author }}</p>
+        <p class="subtitle is-6">@{{ tweet.screenname }}</p>
         </a>
       </div>
     </div>
     <div class="content">
-      {{ tweet.text }}
+      <p [innerHTML]="tweet | tweet"></p>
       <!--
       <time datetime="{{ '01/05/2017' | amParse:'DD/MM/YYYY' | amDateFormat:'YYYY-MM-DD' }}">{{ tweet.created_at |  amTimeAgo}}</time>
       -->
-      <p>{{ tweet.created_at | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</p>
+      <p>{{ tweet.date | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</p>
     </div>
   </div>
 </div>
@@ -42,14 +42,14 @@
             <div class="media-left">
               <figure class="image is-48x48">
                 <a (click)="toggleModal()">
-                  <img [src]="tweet.user.profile_image_url_https" class="User image"/>
+                  <img [src]="tweet.photo" class="User image"/>
                 </a>
               </figure>
             </div>
             <div class="media-content">
               <a (click)="toggleModal()">
-                <p class="title is-4">{{ tweet.user.name }}</p>
-                <p class="subtitle is-6">@{{ tweet.user.screen_name }}</p>
+                <p class="title is-4">{{ tweet.author }}</p>
+                <p class="subtitle is-6">@{{ tweet.screenname}}</p>
               </a>
             </div>
             <div class="media-right">
@@ -62,7 +62,7 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
-            {{ tweet.text }}
+            <p [innerHTML]="tweet | tweet"></p>
             <div class="tags" *ngIf="hasHashtags(tweet)">
               <span class="tag" *ngFor="let tag of tweet.hashtags">{{ tag }}</span>
             </div>
@@ -70,16 +70,16 @@
         </div>
         <div class="card-image" *ngIf="hasPhoto(tweet)">
           <figure class="image">
-            <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
+            <img [src]="tweet.photo" (click)="toggleModal()" />
           </figure>
         </div>
         <footer class="card-footer">
           <p class="card-footer-item">
-            <time datetime="2016-1-1">{{ tweet.created_at |  amTimeAgo}}</time>
+            <time datetime="2016-1-1">{{ tweet.date |  amTimeAgo}}</time>
           </p>
           <p class="card-footer-item">
             <span>
-              See it on <a href="https://twitter.com/{{ tweet.user.screen_name}}/status/{{ tweet.id_str }}">
+              See it on <a href="https://twitter.com/{{ tweet.screenname}}/status/{{ tweet.twid }}">
                 Twitter
                 </a>
             </span>

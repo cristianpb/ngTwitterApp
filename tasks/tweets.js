@@ -15,8 +15,6 @@ var mlab_password = process.env.MLAB_PASSWORD
 var url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets?connectTimeoutMS=6000000`
 //var url = 'mongodb://localhost:27017'
 
-var Tweet = require('../models/Tweet');
-
 MongoClient.connect(url, { useNewUrlParser: true })
   .then(client => {
     var db = client.db('ng-tweets')
@@ -32,13 +30,11 @@ MongoClient.connect(url, { useNewUrlParser: true })
       let err, msg;
       console.time(colors.magenta(tweet.id_str));
       if ('retweeted_status' in tweet) {
-        //var tweetEntry = new Tweet(tweet.retweeted_status);
         saveTweets(db, tweet.retweeted_status, function(err, msg) {
           if (err) console.log(err);
           console.timeEnd(colors.magenta(tweet.id_str));
         })
       } else {
-        //var tweetEntry = new Tweet(tweet);
         saveTweets(db, tweet, function (err, msg) {
           if (err) console.log(err);
           console.timeEnd(colors.magenta(tweet.id_str));
@@ -66,8 +62,19 @@ MongoClient.connect(url, { useNewUrlParser: true })
 
   });
 
-async function saveTweets (db, tweet, callback) {
-  tweet = await Object.assign(tweet, {'timestamp_ms': moment(tweet.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').valueOf()});
+async function saveTweets (db, data, callback) {
+  data = await Object.assign(data, {'timestamp_ms': moment(data.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').valueOf()});
+  var tweet = {
+    twid: data['id_str'],
+    author: data['user']['name'],
+    screenname: data['user']['screen_name'],
+    avatar: data['user']['profile_image_url'],
+    body: ('extended_tweet' in data) ? data.extended_tweet.full_text : data.text,
+    entities: ('entities' in data) ? data.entities : { media: [], urls: [], user_mentions: [] },
+    date: data['created_at'],
+    timestamp_ms: data['timestamp_ms'],
+    hashtags: [],
+  };
   try {
     const collection = await db.collection('tweets')
     await collection.insertOne(tweet)
@@ -75,7 +82,7 @@ async function saveTweets (db, tweet, callback) {
       .catch(err => {
         if (err.code !== 11000) console.log(err);
       })
-    callback(null, `Saved ${tweet.id_str}`)
+    callback(null, `Saved ${tweet.twid}`)
   } catch(err) {
     console.log('Error: ');
     return callback(err)
@@ -83,22 +90,25 @@ async function saveTweets (db, tweet, callback) {
 
 }
 
+async function saveMetadata (db, tweet) {
+  const msg3 = await saveHashtag(db, tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag')
+  const msg4 = await saveHashtag(db, tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'mention')
+}
 
 async function saveHashtag (db, tweet, reg, type) {
-  let text = await ('extended_tweet' in tweet) ? tweet.extended_tweet.full_text : tweet.text
-  let hashtags = await text.match(reg);
+  let hashtags = await tweet.body.match(reg);
   if (hashtags) {
-    console.log('Text: ', text, '\n', type, ': ', hashtags);
+    console.log('Text: ', tweet.body, '\n', type, ': ', hashtags);
     if (hashtags.length > 0) {
       await db.collection('tweets').findOneAndUpdate(
-        {"id_str": tweet.id_str},
+        {"twid": tweet.twid},
         { $set: { "hashtags": hashtags }}
       ).catch(err => console.log('Tweet update error', err))
-      console.log(`updated tweet ${tweet.id_str}`)
+      console.log(`updated tweet ${tweet.twid}`)
       hashtags.forEach(tag => processHashtag(db, tag, hashtags, type, tweet))
     }
   } else {
-    console.log(colors.red('Text: ', text, '\nNo ', type));
+    console.log(colors.red('Text: ', tweet.body, '\nNo ', type));
   }
 }
 
@@ -117,11 +127,6 @@ async function processHashtag (db, tag, hashtags, type, tweet) {
     ).catch(err => console.log('Hash update error', err))
     console.log('updated hashtag: ', norm_tag)
   }
-}
-
-async function saveMetadata (db, tweet) {
-  const msg3 = await saveHashtag(db, tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag')
-  const msg4 = await saveHashtag(db, tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'mention')
 }
 
 function sleep(ms) {
