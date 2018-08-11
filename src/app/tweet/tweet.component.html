@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-image" *ngIf="hasPhoto(tweet)">
     <figure class="image is-4by3">
-      <img [src]="tweet.photo" (click)="toggleModal()" />
+      <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
     </figure>
   </div>
   <div class="card-content">
@@ -42,7 +42,7 @@
             <div class="media-left">
               <figure class="image is-48x48">
                 <a (click)="toggleModal()">
-                  <img [src]="tweet.photo" class="User image"/>
+                  <img [src]="tweet.avatar" class="User image"/>
                 </a>
               </figure>
             </div>
@@ -70,7 +70,7 @@
         </div>
         <div class="card-image" *ngIf="hasPhoto(tweet)">
           <figure class="image">
-            <img [src]="tweet.photo" (click)="toggleModal()" />
+            <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
           </figure>
         </div>
         <footer class="card-footer">
