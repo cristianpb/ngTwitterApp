@@ -27,16 +27,17 @@ MongoClient.connect(url, { useNewUrlParser: true })
 
 
     stream.on('tweet', function (tweet) {
-      let err, msg;
       console.time(colors.magenta(tweet.id_str));
       if ('retweeted_status' in tweet) {
         saveTweets(db, tweet.retweeted_status, function(err, msg) {
           if (err) console.log(err);
+          console.log(msg);
           console.timeEnd(colors.magenta(tweet.id_str));
         })
       } else {
         saveTweets(db, tweet, function (err, msg) {
           if (err) console.log(err);
+          console.log(msg);
           console.timeEnd(colors.magenta(tweet.id_str));
         })
       }
@@ -64,25 +65,35 @@ MongoClient.connect(url, { useNewUrlParser: true })
 
 async function saveTweets (db, data, callback) {
   data = await Object.assign(data, {'timestamp_ms': moment(data.created_at, 'ddd MMM DD HH:mm:ss Z YYYY').valueOf()});
-  var tweet = {
+  var tweet = await {
     twid: data['id_str'],
     author: data['user']['name'],
     screenname: data['user']['screen_name'],
     avatar: data['user']['profile_image_url'],
     body: ('extended_tweet' in data) ? data.extended_tweet.full_text : data.text,
-    entities: ('entities' in data) ? data.entities : { media: [], urls: [], user_mentions: [] },
+    urls: ('entities' in data) ? data.entities.urls : [],
+    media: ('entities' in data) ? data.entities.media : [],
     date: data['created_at'],
     timestamp_ms: data['timestamp_ms'],
-    hashtags: [],
   };
+  await ['quote_count', 'reply_count', 'retweet_count', 'favorite_count'].forEach(element => {
+    if (element in data) tweet[element] = data[element]
+  })
+
   try {
-    const collection = await db.collection('tweets')
-    await collection.insertOne(tweet)
-      .then(saveMetadata(db, tweet))
-      .catch(err => {
-        if (err.code !== 11000) console.log(err);
-      })
-    callback(null, `Saved ${tweet.twid}`)
+    bannedTerms = await ['porn', 'sex'].join('|')
+    var regex2 = await new RegExp(`^(${bannedTerms})$`);
+    if (!(tweet.body.match(regex2, 'g', 'i', 'm'))) {
+      const collection = await db.collection('tweets')
+      await collection.insertOne(tweet)
+        .then(saveMetadata(db, tweet))
+        .catch(err => {
+          if (err.code !== 11000) console.log(err);
+        })
+      callback(null, `Saved ${tweet.twid}`)
+    } else { 
+      callback(null, `Banned ${tweet.body}`)
+    }
   } catch(err) {
     console.log('Error: ');
     return callback(err)
@@ -91,18 +102,20 @@ async function saveTweets (db, data, callback) {
 }
 
 async function saveMetadata (db, tweet) {
-  const msg3 = await saveHashtag(db, tweet, /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm, 'hashtag')
-  const msg4 = await saveHashtag(db, tweet, /\B(\@[a-zA-Z0-9]+\b)(?!;)/gm, 'mention')
+  const msg3 = await saveHashtag(db, tweet, /#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/gm, 'hashtag')
+  const msg4 = await saveHashtag(db, tweet, /@(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/gm, 'mention')
 }
 
 async function saveHashtag (db, tweet, reg, type) {
   let hashtags = await tweet.body.match(reg);
+  var updateVal = await {};
+  updateVal[`${type}s`] = await hashtags;
   if (hashtags) {
     console.log('Text: ', tweet.body, '\n', type, ': ', hashtags);
     if (hashtags.length > 0) {
       await db.collection('tweets').findOneAndUpdate(
         {"twid": tweet.twid},
-        { $set: { "hashtags": hashtags }}
+        { $set: updateVal}
       ).catch(err => console.log('Tweet update error', err))
       console.log(`updated tweet ${tweet.twid}`)
       hashtags.forEach(tag => processHashtag(db, tag, hashtags, type, tweet))

@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-image" *ngIf="hasPhoto(tweet)">
     <figure class="image is-4by3">
-      <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
+      <img [src]="tweet.media[0].media_url_https" (click)="toggleModal()" />
     </figure>
   </div>
   <div class="card-content">
@@ -70,13 +70,22 @@
         </div>
         <div class="card-image" *ngIf="hasPhoto(tweet)">
           <figure class="image">
-            <img [src]="tweet.entities?.media[0].media_url_https" (click)="toggleModal()" />
+            <img [src]="tweet.media[0].media_url_https" (click)="toggleModal()" />
           </figure>
         </div>
         <footer class="card-footer">
           <p class="card-footer-item">
             <time datetime="2016-1-1">{{ tweet.date |  amTimeAgo}}</time>
           </p>
+
+          <p class="card-footer-item" *ngIf="hasFavorite(tweet)">
+            <fa-icon [icon]="faThumbsUp"></fa-icon>   {{ tweet.favorite_count }} 
+          </p>
+
+          <p class="card-footer-item" *ngIf="hasFavorite(tweet)">
+            <fa-icon [icon]="faRetweet"></fa-icon>   {{ tweet.retweet_count }}
+          </p>
+
           <p class="card-footer-item">
             <span>
               See it on <a href="https://twitter.com/{{ tweet.screenname}}/status/{{ tweet.twid }}">

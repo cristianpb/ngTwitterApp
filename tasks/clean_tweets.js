@@ -9,14 +9,20 @@ resetTweets()
 async function resetTweets () {
   let client = await MongoClient.connect(url, { useNewUrlParser: true })
   let db = await client.db('ng-tweets')
-  let msg = await db.dropCollection('tweets')
-  let collection = await db.collection('tweets')
-  let msg2 = await collection.createIndex( { "twid": 1}, { unique: true } )
-  console.log('Index Created', msg2);
-  let msg4 = await db.dropCollection('hashtags')
-  let msg5 = await db.createCollection('hashtags')
-  let msg3 = await client.close()
-  console.log('Reset hashtags');
+
+  await db.dropCollection('tweets')
+  let collection_tweets = await db.collection('tweets')
+  await collection_tweets.createIndex( { "twid": 1}, { unique: true } )
+  console.log('Index Created');
+  try {
+    await db.dropCollection('hashtags')
+    let collection_tags = await db.collection('hashtags')
+    await collection_tags.createIndex( { "label": 1} )
+    await client.close()
+    console.log('Reset hashtags');
+  } catch(err) {
+    console.log('Error hashtags', err);
+  }
 }
 
 //MongoClient.connect(url, { useNewUrlParser: true }).then(client => {

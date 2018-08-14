@@ -6,35 +6,27 @@ var schema = new mongoose.Schema({
   screenname: String,
   avatar: String,
   body: String,
-  entities: {
-    'media': [{
-      id: Number,
-      media_url_https: String,
-      url: String,
-      type: 'photo' | 'video',
-      expanded_url: String,
-      sizes: {
-        thumb: {
-          w: Number,
-          h: Number,
-          resize: 'fit' | 'crop',
-        },
+  media: [{
+    id: Number,
+    media_url_https: String,
+    url: String,
+    type: 'photo' | 'video',
+    expanded_url: String,
+    sizes: {
+      thumb: {
+        w: Number,
+        h: Number,
+        resize: 'fit' | 'crop',
       },
-    }],
-    urls: [{
-      display_url: String,
-      expanded_url: String,
-      url: String,
-    }],
-    user_mentions: [{
-      screen_name: String,
-      name: String,
-      id: Number,
-    }],
-  },
+    },
+  }],
+  urls: [{
+    display_url: String,
+    expanded_url: String,
+    url: String,
+  }],
   date: String,
   timestamp_ms: Number,
-  hashtags: [String] //, lowercase: true, trim: true}]
 })
 
 // Create a static getTweets method to return tweet data from the db

@@ -12,23 +12,29 @@ export class TweetPipe implements PipeTransform {
   transform(tweet: Tweet, args?: any): any {
     let text = this.sanitizer.sanitize(SecurityContext.NONE, tweet.body);
 
+    if (tweet.hashtags) {
+      tweet.hashtags.forEach(tag => {
+        text = text.replace(new RegExp(`${tag}`, 'gi'), `<span class="has-text-danger">${tag}</span>`);
+      });
+    }
+              
     // Replace screen names with links
-    if (tweet.entities.user_mentions) {
-      tweet.entities.user_mentions.forEach(mention => {
-        text = text.replace(new RegExp(`@${mention.screen_name}`, 'gi'), `<a href="https://twitter.com/${mention.screen_name}" target="_blank">@${mention.screen_name}</a>`);
+    if (tweet.mentions) {
+      tweet.mentions.forEach(mention => {
+        text = text.replace(new RegExp(`${mention}`, 'gi'), `<a href="https://twitter.com/${mention}" target="_blank" class="has-text-info">${mention}</a>`);
       });
     }
 
     // Replace links with clickable links
-    if (tweet.entities.urls) {
-      tweet.entities.urls.forEach(url => {
+    if (tweet.urls) {
+      tweet.urls.forEach(url => {
         text = text.replace(url.url, `<a href="${url.url}" target="_blank">${url.display_url}</a>`);
       });
     }
     
     // Remove media urls since we display them
-    if (tweet.entities.media) {
-      tweet.entities.media.forEach(url => {
+    if (tweet.media) {
+      tweet.media.forEach(url => {
         text = text.replace(url.url, '');
       });
     }

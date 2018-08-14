@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { Tweet } from '../tweet';
+import { faRetweet, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-tweet',
@@ -11,11 +12,12 @@ export class TweetComponent {
   @Input() tweet: Tweet;
   @Input() retweet: Tweet;
   @Output() action = new EventEmitter<{property: string, tweet: Tweet}>();
+  faRetweet = faRetweet;
+  faThumbsUp = faThumbsUp;
 
   hasPhoto(tweet: Tweet) {
-    if ('media' in tweet.entities) {
-      if (tweet.entities.media.length
-        && tweet.entities.media[0].type === 'photo') {
+    if (tweet.media) {
+      if (tweet.media[0].type === 'photo') {
         return true;
       }
     }
@@ -33,6 +35,12 @@ export class TweetComponent {
     return false;
   }
 
+  hasFavorite(tweet: Tweet) {
+    if (tweet.favorite_count > 0) {
+        return true;
+    }
+    return false;
+  }
 
   toggleAction(property: 'favorite'|'retweet') {
     this.action.emit({property, tweet: this.tweet});
