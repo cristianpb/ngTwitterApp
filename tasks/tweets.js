@@ -81,7 +81,7 @@ async function saveTweets (db, data, callback) {
   })
 
   try {
-    bannedTerms = await ['porn', 'sex'].join('|')
+    bannedTerms = await ['#porn', '#sex', '#porno'].join('|')
     var regex2 = await new RegExp(`^(${bannedTerms})$`);
     if (!(tweet.body.match(regex2, 'g', 'i', 'm'))) {
       const collection = await db.collection('tweets')

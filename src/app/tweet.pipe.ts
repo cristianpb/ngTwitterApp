@@ -14,7 +14,7 @@ export class TweetPipe implements PipeTransform {
 
     if (tweet.hashtags) {
       tweet.hashtags.forEach(tag => {
-        text = text.replace(new RegExp(`${tag}`, 'gi'), `<span class="has-text-danger">${tag}</span>`);
+        text = text.replace(new RegExp(`${tag}`, 'gi'), `<span class="has-text-primary">${tag}</span>`);
       });
     }
               
