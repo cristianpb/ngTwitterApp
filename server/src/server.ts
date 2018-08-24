@@ -1,8 +1,13 @@
-import app from "./app";
+//import app from "./app";
+//
+//const server = app.listen(3000, () => {
+//   console.log("App is running...");
+//   console.log("Press Ctrl-C to stop");
+//});
+//
+//export default server;
 
-const server = app.listen(3000, () => {
-   console.log("App is running...");
-   console.log("Press Ctrl-C to stop");
-});
+import { TweetServer } from './tweet-server';
 
-export default server;
+let app = new TweetServer().getApp();
+export { app };
