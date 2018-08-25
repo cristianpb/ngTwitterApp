@@ -37,7 +37,7 @@ export class TweetServer {
   }
 
   private mongoConnect(): void {
-    console.log('CONN');
+    console.log('Connected');
     MongoClient.connect('mongodb://localhost').then(
       connection => {
       this.db = connection.db('warriors');
@@ -89,7 +89,6 @@ export class TweetServer {
     const messageSear = new Message('', 1);
     const repository = new MessageRepository(this.db, 'messages');
     const mess = await repository.find(messageSear);
-    console.log('HHHH', mess);
     return mess[0];
   }
 

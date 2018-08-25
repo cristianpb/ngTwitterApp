@@ -5,6 +5,9 @@ import { magenta } from 'colors';
 
 import Twit from 'twit';
 
+const mlab_username = process.env.MLAB_USERNAME
+const mlab_password = process.env.MLAB_PASSWORD
+
 const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -15,8 +18,10 @@ const T = new Twit({
 // creating a function that execute self runs
 (async () => {
   // connecting at mongoClient
-  const connection = await MongoClient.connect('mongodb://localhost', { useNewUrlParser: true });
-  const db = connection.db('warriors');
+  //const connection = await MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true });
+  const connection = await MongoClient.connect(`mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`, { useNewUrlParser: true });
+
+  const db = connection.db('ng-tweets');
   console.log('Connected');
   const stream = T.stream('statuses/filter', {
     track: ['paris']
