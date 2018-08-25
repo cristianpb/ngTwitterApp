@@ -1,8 +1,9 @@
-var MongoClient = require('mongodb').MongoClient
-var mlab_username = process.env.MLAB_USERNAME
-var mlab_password = process.env.MLAB_PASSWORD
-var url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`
-//var url = 'mongodb://localhost:27017'
+import { MongoClient } from 'mongodb';
+
+const mlab_username = process.env.MLAB_USERNAME;
+const mlab_password = process.env.MLAB_PASSWORD;
+const url = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`;
+//const url = 'mongodb://localhost:27017'
 
 resetTweets()
 

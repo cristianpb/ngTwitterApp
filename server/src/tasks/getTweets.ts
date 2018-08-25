@@ -1,6 +1,6 @@
 // importing mongoClient to connect at mongodb
 import { MongoClient } from 'mongodb';
-import { processTweet } from './lib/processTweet';
+import { processTweet } from '../lib/processTweet';
 import { magenta } from 'colors';
 
 import Twit from 'twit';
