@@ -9,8 +9,8 @@
     "watch-node": "nodemon dist/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "test": "mocha --require ts-node/register test/**/*.ts",
-    "build-ts": "tsc",
-    "watch-ts": "tsc -w",
+    "build-ts": "./node_modules/.bin/tsc",
+    "watch-ts": "./node_modules/.bin/tsc -w",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "debug": "npm run build && npm run watch-debug",
     "serve-debug": "nodemon --inspect dist/server.js",
@@ -38,7 +38,7 @@
     "ts-jest": "^22.4.6",
     "ts-node": "^6.2.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "typescript": "^3.0.1"
   },
   "dependencies": {
     "@types/twit": "^2.2.19",
