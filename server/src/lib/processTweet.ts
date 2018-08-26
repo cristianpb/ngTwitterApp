@@ -30,7 +30,7 @@ export class processTweet {
   };
 
   static isBanned = async function (text: string) {
-    let bannedTerms = await ['#sex', '#porn', '#porno'].join('|')
+    let bannedTerms = await ['#sex', '#porn', '#porno', 'porn', 'sex', 'porno', 'sexo'].join('|')
     let regex2 = await new RegExp(`(?:^|(?<= ))(${bannedTerms})(?:(?= )|$)`, 'gim');
     if (!(regex2.test(text))) {
       return false

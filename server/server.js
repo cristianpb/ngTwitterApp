@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const Tweet = require('./models/Tweet');
-const Hashtag = require('./models/Hashtag');
-const Message = require('./models/Message');
+const Tweet = require('../models/Tweet');
+const Hashtag = require('../models/Hashtag');
+const Message = require('../models/Message');
 const https = require('https');
 var CronJob = require('cron').CronJob;
 
 const app = express();
-var port = process.env.PORT || 3000; 
+var port = process.env.PORT || 3001; 
 var mlab_username = process.env.MLAB_USERNAME
 var mlab_password = process.env.MLAB_PASSWORD
 
@@ -18,9 +18,9 @@ mongoose.connect(`mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:
 app.use(require('cors')());
 app.use(require('body-parser').json());
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '../dist')));
 app.get('/', (req,res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'))
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
 });
 
 app.get('/api/tweets/:page', (req, res) => {
