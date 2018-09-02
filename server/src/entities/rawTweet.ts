@@ -60,6 +60,7 @@ export class rawTweet {
   retweet_count: number;
   favorited: boolean;
   retweeted: boolean;
+  retweeted_status?: rawTweet;
   lang: string;
   extended_tweet?: {
 		full_text: string;

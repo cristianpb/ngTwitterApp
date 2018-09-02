@@ -19,7 +19,7 @@ export abstract class BaseRepository<T> implements IWrite<T>, IRead<T> {
   // we add to method, the async keyword to manipulate the insert result
   // of method.
   async create(item: T): Promise<boolean> {
-    const result: InsertOneWriteOpResult = await this._collection.insert(item);
+    const result: InsertOneWriteOpResult = await this._collection.insertOne(item);
     // after the insert operations, we returns only ok property (that haves a 1 or 0 results)
     // and we convert to boolean result (0 false, 1 true)
     return !!result.result.ok;
@@ -29,6 +29,7 @@ export abstract class BaseRepository<T> implements IWrite<T>, IRead<T> {
   update(id: string, item: T): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
+
   delete(id: string): Promise<boolean> {
     throw new Error('Method not implemented.');
   }

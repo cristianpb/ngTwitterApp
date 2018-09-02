@@ -3,26 +3,27 @@ import { MongoClient, Db, Collection, InsertOneWriteOpResult } from 'mongodb';
 import { TweetRepository } from '../repositories/TweetRepository'
 import { Tweet } from '../entities/tweet';
 import { rawTweet } from '../entities/rawTweet';
-import { magenta, red, blue, yellow } from 'colors';
-
+import { magenta, red, blue, yellow, green } from 'colors';
+import moment from 'moment';
 
 export class processTweet {
   static saveTweets = async function (db: Db, data: rawTweet) {
-    let tweet = new Tweet(data);
+    let tweet = await new Tweet(data);
     try {
-      let isBan = await processTweet.isBanned(tweet.body);
+      const isBan = await processTweet.isBanned(tweet.body);
       if (isBan) {
-        return red(`Banned ${tweet.body}`)
-      } else { 
-        const repository = new TweetRepository(db, 'tweets');
+        return red(`Banned ${tweet.body}`);
+      } else {
+        let repository = new TweetRepository(db, 'tweets');
         const result = await repository.create(tweet);
         await processTweet.saveMetadata(db, tweet)
-        return `Saved ${tweet.twid}`
+        return green(`Saved ${tweet.twid}`)
       }
     } catch(err) {
-      if (err.code !== 11000) {
-        console.log(err);
-        return blue(`Repeated tweet`)
+      if (err.code === 11000) {
+        let repository = new TweetRepository(db, 'tweets');
+        const result = await repository.updateTweet(tweet.twid, tweet);
+        return blue(`Updated ${result}`)
       } else {
         throw new Error(err)
       }
@@ -46,7 +47,7 @@ export class processTweet {
 
   static saveHashtag = async function  (db: Db, tweet: Tweet, reg: RegExp, annotationType: string) {
     let hashtags = await tweet.body.match(reg);
-    let updateVal: setTags = await {};
+    let updateVal: SetTags = await {};
     if (annotationType === 'mention') {
       updateVal.mentions = hashtags
     }
@@ -91,10 +92,37 @@ export class processTweet {
         console.log('Hash update error', err)
       }
     }
-  }
+  };
+
+  static searchTweets = async function (db: Db, T: any, trackTerm: string) {
+    const enddate = moment().subtract(2, 'days').format('YYYY-MM-DD');
+    let result = await T.get('search/tweets', {
+      q: trackTerm,
+      until: enddate,
+      count: 50,
+      result_type: 'mixed',
+      tweet_mode: 'extended'
+    })
+    if (result.data.statuses.length === 0) return 'Zero tweets found'
+    console.log(`Total tweets ${result.data.statuses.length}`);
+    await result.data.statuses.forEach(async function (tweet: rawTweet) {
+      if (!('retweeted_status' in tweet)) {
+        const msg = await processTweet.saveTweets(db, tweet);
+        console.log(msg);
+      } else {
+        console.log(red(`Retweet ${tweet.retweeted_status.user.screen_name}`));
+      }
+    });
+    return 'Processed tweets'
+  };
 }
 
-interface setTags {
+interface SetTags {
   mentions?: string[];
   hashtags?: string[];
+}
+
+interface ResultSearchTweets {
+  data: any;
+  resp: any;
 }

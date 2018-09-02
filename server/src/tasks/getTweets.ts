@@ -4,6 +4,7 @@ import { processTweet } from '../lib/processTweet';
 import { magenta } from 'colors';
 
 import Twit from 'twit';
+import { CronJob } from 'cron';
 
 const mlab_username = process.env.MLAB_USERNAME
 const mlab_password = process.env.MLAB_PASSWORD
@@ -23,8 +24,9 @@ const T = new Twit({
 
   const db = connection.db('ng-tweets');
   console.log('Connected');
+  const trackedTerms = ['GSWAI'];
   const stream = T.stream('statuses/filter', {
-    track: ['paris']
+    track: trackedTerms
   });
 
   stream.on('tweet', async function (tweet) {
@@ -64,4 +66,23 @@ const T = new Twit({
     console.log('disconnect', disconnectMessage);
     connection.close();
   });
+
+  const result = await processTweet.searchTweets(db, T, 'GSWAI');
+  console.log(result);
+  const job = new CronJob({
+    cronTime: '*/6 * * * *',
+    onTick: async function () {
+      /*
+       * At every 6 minutes
+       */
+      const result = await processTweet.searchTweets(db, T, 'GSWAI');
+      console.log(result);
+    },
+    start: false,
+    timeZone: 'Europe/Paris'
+  });
+  job.start();
+
+
+
 })();

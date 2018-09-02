@@ -40,7 +40,13 @@ export class Tweet {
     this.author = data.user.name;
     this.screenname = data.user.screen_name;
     this.avatar = data.user.profile_image_url_https;
-    this.body =  ('extended_tweet' in data) ? data.extended_tweet.full_text : data.text;
+    if ('extended_tweet' in data) {
+      this.body = data.extended_tweet.full_text
+    } else if ('full_text' in data) {
+      this.body = data.full_text
+    } else {
+      this.body = data.text
+    }
     this.urls =  ('entities' in data) ? data.entities.urls : [];
     this.media = ('entities' in data) ? data.entities.media : [];
     this.date =  data['created_at'];
@@ -49,13 +55,13 @@ export class Tweet {
       this.quote_count = data['quote_count']
     }
     if ('reply_count' in data && data.reply_count > 0) {
-      this.quote_count = data['reply_count']
+      this.reply_count = data['reply_count']
     }
     if ('retweet_count' in data && data.retweet_count > 0) {
-      this.quote_count = data['retweet_count']
+      this.retweet_count = data['retweet_count']
     }
     if ('favorite_count' in data && data.favorite_count > 0) {
-      this.quote_count = data['favorite_count']
+      this.favorite_count = data['favorite_count']
     }
   }
 }
