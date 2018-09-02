@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Tweet } from '../tweet';
+import { Hashtag } from '../hashtag';
 import { TwitterService } from '../twitter.service';
 
 @Component({
@@ -14,12 +15,18 @@ export class TweetsComponent implements OnInit, OnDestroy {
   timer;
   since = '';
   currentPage = 0;
+  hashtags: Hashtag[] = [];
+  max_hashtags = 0;
 
   constructor(private twitter: TwitterService) {}
 
   ngOnInit() {
     this.getStream();
-    this.timer = setInterval(() => this.getStream(), 61000);
+    this.getHashtags();
+    this.timer = setInterval(() => {
+      this.getStream()
+      this.getHashtags()
+    }, 61000);
   }
 
   ngOnDestroy() {
@@ -44,7 +51,7 @@ export class TweetsComponent implements OnInit, OnDestroy {
 
   getStream() {
     this.twitter.stream().subscribe(tweets => {
-      this.tweets = tweets.data
+      this.tweets = tweets.data;
       // tweets.data.reverse().forEach(tweet => {
       //   if (this.ids.indexOf(tweet.id_str) < 0) {
       //     this.ids.push(tweet.id_str);
@@ -61,6 +68,17 @@ export class TweetsComponent implements OnInit, OnDestroy {
       this.tweets.splice(9);
       this.ids.splice(9);
     }
+  }
+
+  getHashtags() {
+    this.twitter.hashtags().subscribe(hashtags => {
+      this.hashtags = hashtags.data;
+      hashtags.data.forEach(hashtag => {
+        if (hashtag.value > this.max_hashtags) {
+            this.max_hashtags = hashtag.value;
+        }
+      });
+    });
   }
 
   // action(action, index) {

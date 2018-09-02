@@ -7,10 +7,17 @@
 </nav>
 <br>
 
+
+<div class="columns">
+  <div class="column">
+    <app-mapsvg [hashtags]="hashtags"></app-mapsvg>
+  </div>
+</div>
+
 <div class="tile is-ancestor">
   <div class="tile is-one-third is-vertical is-parent">
     <div class="tile is-child box">
-      <app-hashtags></app-hashtags>
+      <app-hashtags [hashtags]="hashtags"></app-hashtags>
     </div>
     <div class="tile is-child box">
       <app-tweet [tweet]="tweets[2]"></app-tweet>

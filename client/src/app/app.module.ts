@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { TweetComponent } from './tweet/tweet.component';
 import { TweetsComponent } from './tweets/tweets.component';
+import { MapsvgComponent } from './mapsvg/mapsvg.component';
 import { TweetPipe } from './tweet.pipe';
 import { MomentModule } from 'angular2-moment';
 import { HashtagsComponent } from './hashtags/hashtags.component';
@@ -20,6 +21,7 @@ import { MessagesComponent } from './messages/messages.component';
     TweetPipe,
     HashtagsComponent,
     MessagesComponent,
+    MapsvgComponent
   ],
   imports: [
     BrowserModule,

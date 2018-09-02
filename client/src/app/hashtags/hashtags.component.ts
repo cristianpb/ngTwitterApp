@@ -1,39 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Hashtag } from '../hashtag';
-import { TwitterService } from '../twitter.service';
 
 @Component({
   selector: 'app-hashtags',
   templateUrl: './hashtags.component.html',
   styleUrls: ['./hashtags.component.scss']
 })
-export class HashtagsComponent implements OnInit, OnDestroy {
-  hashtags: Hashtag[] = [];
-  constructor(private twitter: TwitterService) {}
-  ids = [];
-  timer;
-  max_hashtags = 0;
+export class HashtagsComponent implements OnInit {
+  @Input() hashtags: Hashtag[];
 
-  ngOnInit() {
-    this.getHashtags();
-    this.timer = setInterval(() => this.getHashtags(), 61000);
-  }
+  constructor() {}
 
-  ngOnDestroy() {
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-  }
+  ngOnInit() { }
 
-  getHashtags() {
-    this.twitter.hashtags().subscribe(hashtags => {
-      this.hashtags = hashtags.data;
-      hashtags.data.forEach(hashtag => {
-        if (hashtag.value > this.max_hashtags) {
-            this.max_hashtags = hashtag.value;
-        }
-      });
-    });
-  }
 
 }
