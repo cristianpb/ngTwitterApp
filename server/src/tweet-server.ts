@@ -48,9 +48,9 @@ export class TweetServer {
   private static_content(): void {
     this.app.use(require('cors')());
     this.app.use(require('body-parser').json());
-    this.app.use(express.static(path.join(__dirname, '../../client/dist')));
+    this.app.use(express.static(path.join(__dirname, '../../dist')));
     this.app.get('/', (req,res) => {
-      res.sendFile(path.join(__dirname, '../../client/dist/index.html'))
+      res.sendFile(path.join(__dirname, '../../dist/index.html'))
     });
   }
 

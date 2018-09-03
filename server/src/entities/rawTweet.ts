@@ -64,11 +64,11 @@ export class rawTweet {
   lang: string;
   extended_tweet?: {
 		full_text: string;
-		display_text_range: [],
+		display_text_range: number[],
 		entities: {
 			hashtags: {
 				text: string;
-				indices: []
+				indices: number[]
 			}[]
 		}
 	}
