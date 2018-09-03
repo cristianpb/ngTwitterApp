@@ -29,37 +29,42 @@
         GSWAI 2017
       </a>
 
-      <!--
       <a class="navbar-item" href="/team">
         Team
       </a>
-      -->
 
-      <div class="navbar-item">
-        <div class="field is-grouped">
-          <p class="control">
-            <a class="bd-tw-button button" href="https://twitter.com/GlobalSWAI">
-              <div style="text-align:center">
-                <fa-icon [icon]="faTwitter"></fa-icon>
-              </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Media  &nbsp; 
+          </a>
+          <div class="navbar-dropdown is-boxed">
+            <a class="navbar-item bd-tw-button button" href="https://globalswai.co/videos">
+                <fa-icon [icon]="faYoutube"></fa-icon> Videos
             </a>
-          </p>
-          <p class="control">
-            <a class="bd-tw-button button" href="https://www.facebook.com/GlobalSWAI">
-              <div style="text-align:center">
-                <fa-icon [icon]="faFacebook"></fa-icon>
-              </div>
+            <a class="navbar-item bd-tw-button button" href="https://globalswai.co/articles">
+                <fa-icon [icon]="faMedium"></fa-icon> Articles
             </a>
-          </p>
-          <p class="control">
-            <a class="bd-tw-button button" href="https://www.instagram.com/global_swai">
-              <div style="text-align:center">
-                <fa-icon [icon]="faInstagram"></fa-icon>
-              </div>
-            </a>
-          </p>
+          </div>
+          <hr class="navbar-divider">
         </div>
-      </div>
+
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Find us &nbsp; 
+          </a>
+          <div class="navbar-dropdown is-boxed">
+            <a class="navbar-item bd-tw-button button" href="https://twitter.com/GlobalSWAI">
+                <fa-icon [icon]="faTwitter"></fa-icon> Twitter
+            </a>
+            <a class="navbar-item bd-tw-button button" href="https://www.facebook.com/GlobalSWAI">
+                <fa-icon [icon]="faFacebook"></fa-icon> Facebook
+            </a>
+            <a class="navbar-item bd-tw-button button" href="https://www.instagram.com/global_swai">
+                <fa-icon [icon]="faInstagram"></fa-icon> Instagram
+            </a>
+          </div>
+        </div>
 
     </div>
   </div>
@@ -94,3 +99,47 @@
 
 <app-messages></app-messages>
 
+<footer class="footer">
+  <div class="container">
+    <div class="content">
+
+
+      <div class="columns">
+        <div class="column">
+          <aside class="menu">
+          <p class="menu-label">
+            <a href="/">Global SWAI</a>
+          </p>
+          <ul class="menu-list no-bullets">
+            <li><a href="/#about">Get involved</a></li>
+            <li><a href="/gswai2017">GSWAI 2017</a></li>
+            <li><a href="/team">Team</a>
+            <li><a href="/medium_posts">Media </a>
+              <ul>
+                <li><a href="/videos"><fa-icon [icon]="faYoutube"></fa-icon> Videos</a></li>
+                <li><a href="/articles"><fa-icon [icon]="faMedium"></fa-icon> Articles</a></li>
+              </ul>
+            </li>
+          </ul>
+          </aside>
+        </div>
+        <div class="column">
+          <p class="menu-label">
+            Find us!
+          </p>
+          <a href="https://twitter.com/GlobalSWAI"><fa-icon [icon]="faTwitter"></fa-icon>&nbsp;</a>
+          <a href="https://www.facebook.com/GlobalSWAI"><fa-icon [icon]="faFacebook"></fa-icon>&nbsp;</a>
+          <a href="https://www.instagram.com/global_swai"><fa-icon [icon]="faInstagram"></fa-icon>&nbsp;</a>
+        </div>
+      </div>
+
+      <div class="has-text-centered">
+        <p>
+          2018 - Global Startup Weekend Team
+        </p>
+      </div>
+      <p>
+      </p>
+    </div>
+  </div>
+</footer>
