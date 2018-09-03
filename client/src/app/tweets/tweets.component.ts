@@ -51,6 +51,7 @@ export class TweetsComponent implements OnInit, OnDestroy {
 
   getStream() {
     this.twitter.stream().subscribe(tweets => {
+      console.log(tweets);
       this.tweets = tweets.data;
       // tweets.data.reverse().forEach(tweet => {
       //   if (this.ids.indexOf(tweet.id_str) < 0) {

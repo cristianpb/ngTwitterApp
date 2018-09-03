@@ -2,8 +2,8 @@ export class rawTweet {
   created_at: string;
   id: number;
   id_str: string;
-  text: string;
   full_text: string;
+  text: string;
   entities: {
     hashtags: any[];
     symbols: any[];

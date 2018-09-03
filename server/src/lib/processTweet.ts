@@ -52,7 +52,7 @@ export class processTweet {
       updateVal.mentions = hashtags
     }
     if (annotationType === 'hashtag') {
-      updateVal.mentions = hashtags
+      updateVal.hashtags = hashtags
     }
     if (hashtags) {
       console.log('Text: ', tweet.body, '\n', annotationType, ': ', hashtags);
@@ -98,7 +98,7 @@ export class processTweet {
     const enddate = moment().subtract(2, 'days').format('YYYY-MM-DD');
     let result = await T.get('search/tweets', {
       q: trackTerm,
-      until: enddate,
+      //until: enddate,
       count: 50,
       result_type: 'mixed',
       tweet_mode: 'extended'

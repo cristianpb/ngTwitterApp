@@ -107,10 +107,11 @@ export class TweetServer {
 
   private async getHashtags () {
     let docs = await this.db.collection('hashtags')
-      .find({"label":{"$in":["#paris", "#lapaz", "#hongkong", "#sydney", "#carthage", "#bruxelles", "#douala", "#lima", "#istanbul", "#taipei", "#mexico"]}})
+      .find({})
       .sort({value: -1})
       .limit(15)
       .toArray()
+    //.find({"label":{"$in":["#paris", "#lapaz", "#hongkong", "#sydney", "#carthage", "#bruxelles", "#douala", "#lima", "#istanbul", "#taipei", "#mexico"]}})
     return docs
   }
 

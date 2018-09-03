@@ -1,3 +1,9 @@
+<div class="columns">
+  <div class="column">
+    <app-mapsvg [hashtags]="hashtags"></app-mapsvg>
+  </div>
+</div>
+
 <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
   <a class="pagination-previous" (click)="previousPage()">Previous</a>
   <a (click)="nextPage()" class="pagination-next">Next page</a>
@@ -7,45 +13,54 @@
 </nav>
 <br>
 
-
-<div class="columns">
-  <div class="column">
-    <app-mapsvg [hashtags]="hashtags"></app-mapsvg>
-  </div>
-</div>
-
 <div class="tile is-ancestor">
   <div class="tile is-one-third is-vertical is-parent">
     <div class="tile is-child box">
       <app-hashtags [hashtags]="hashtags"></app-hashtags>
     </div>
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[2]"></app-tweet>
+    <div *ngIf="tweets[2]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[2]"></app-tweet>
+      </div>
     </div>
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[5]"></app-tweet>
+    <div *ngIf="tweets[5]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[5]"></app-tweet>
+      </div>
     </div>
   </div>
   <div class="tile is-one-third is-vertical is-parent">
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[0]"></app-tweet>
+    <div *ngIf="tweets[0]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[0]"></app-tweet>
+      </div>
     </div>
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[3]"></app-tweet>
+    <div *ngIf="tweets[3]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[3]"></app-tweet>
+      </div>
     </div>
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[6]"></app-tweet>
+    <div *ngIf="tweets[6]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[6]"></app-tweet>
+      </div>
     </div>
   </div>
   <div class="tile is-vertical is-parent">
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[1]"></app-tweet>
+    <div *ngIf="tweets[1]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[1]"></app-tweet>
+      </div>
     </div>
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[4]"></app-tweet>
+    <div *ngIf="tweets[4]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[4]"></app-tweet>
+      </div>
     </div>
-    <div class="tile is-child box">
-      <app-tweet [tweet]="tweets[7]"></app-tweet>
+    <div *ngIf="tweets[7]">
+      <div class="tile is-child box">
+        <app-tweet [tweet]="tweets[7]"></app-tweet>
+      </div>
     </div>
   </div>
 </div>

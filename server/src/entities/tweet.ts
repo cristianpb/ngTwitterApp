@@ -44,9 +44,7 @@ export class Tweet {
       this.body = data.extended_tweet.full_text
     } else if ('full_text' in data) {
       this.body = data.full_text
-    } else {
-      this.body = data.text
-    }
+    } 
     this.urls =  ('entities' in data) ? data.entities.urls : [];
     this.media = ('entities' in data) ? data.entities.media : [];
     this.date =  data['created_at'];

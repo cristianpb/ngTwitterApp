@@ -19,8 +19,8 @@ const T = new Twit({
 // creating a function that execute self runs
 (async () => {
   // connecting at mongoClient
-  //const connection = await MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true });
-  const connection = await MongoClient.connect(`mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`, { useNewUrlParser: true });
+  const connection = await MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true });
+  //const connection = await MongoClient.connect(`mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`, { useNewUrlParser: true });
 
   const db = connection.db('ng-tweets');
   console.log('Connected');
