@@ -7,6 +7,11 @@ import { MongoClient } from 'mongodb';
 import { MessageRepository } from './repositories/MessageRepository';
 import { Message } from './entities/message';
 
+const mlab_username = process.env.MLAB_USERNAME
+const mlab_password = process.env.MLAB_PASSWORD
+const mongourl = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`;
+//const mongourl = 'mongodb://localhost:27017/ng-tweets';
+
 export class TweetServer {
   public static readonly PORT:number = 3001;
   private app: express.Application;
@@ -26,7 +31,7 @@ export class TweetServer {
 
   private mongoConnect(): void {
     console.log('Connected');
-    MongoClient.connect('mongodb://localhost:27017').then(
+    MongoClient.connect(mongourl).then(
       connection => {
       this.db = connection.db('ng-tweets');
       }
