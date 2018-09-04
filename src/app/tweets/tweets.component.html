@@ -1,17 +1,8 @@
 <div class="columns">
-  <div class="column">
+  <div class="column is-hidden-touch">
     <app-mapsvg [hashtags]="hashtags"></app-mapsvg>
   </div>
 </div>
-
-<nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
-  <a class="pagination-previous" (click)="previousPage()">Previous</a>
-  <a (click)="nextPage()" class="pagination-next">Next page</a>
-  <ul class="pagination-list">
-    <li><a class="pagination-link" aria-current="page">{{ currentPage }}</a></li>
-  </ul>
-</nav>
-<br>
 
 <div class="tile is-ancestor">
   <div class="tile is-one-third is-vertical is-parent">
@@ -64,6 +55,15 @@
     </div>
   </div>
 </div>
+
+<nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
+  <a class="pagination-previous" (click)="previousPage()">Previous</a>
+  <a (click)="nextPage()" class="pagination-next">Next page</a>
+  <ul class="pagination-list">
+    <li><a class="pagination-link" aria-current="page">{{ currentPage }}</a></li>
+  </ul>
+</nav>
+<br>
 
 <!--
 <div class="columns tweets is-multiline">
