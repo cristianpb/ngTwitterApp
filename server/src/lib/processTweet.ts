@@ -120,10 +120,10 @@ export class processTweet {
   };
 
   static searchNews = async (db: Db) => {
-    await db.dropCollection('news')
     https.get(`https://newsapi.org/v2/everything?q=intelligence%20artificielle&apiKey=${newsapi_key}&sortBy=publishedAt`, (resp) => {
       resp.setEncoding('utf8');
       resp.on('data', async (chunk: string) => {
+        await db.collection('news').remove()
         processTweet.processNews(db, JSON.parse(chunk).articles)
       });
       resp.on('end', () => {});
@@ -139,6 +139,7 @@ export class processTweet {
   }
 
 }
+
 
 interface SetTags {
   mentions?: string[];

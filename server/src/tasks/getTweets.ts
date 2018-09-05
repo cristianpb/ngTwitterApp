@@ -68,6 +68,7 @@ const T = new Twit({
   //  connection.close();
   //});
 
+  await processTweet.searchNews(db)
   new CronJob({
     cronTime: '00 */4 * * *',
     onTick: async function () {
