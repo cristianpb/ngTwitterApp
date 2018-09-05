@@ -46,4 +46,8 @@ export class TwitterService {
     return this.http.get<TwitterResponse>(`${environment.api}/read`);
   }
 
+  getNews() {
+    return this.http.get<any>(`${environment.api}/news`);
+  }
+
 }

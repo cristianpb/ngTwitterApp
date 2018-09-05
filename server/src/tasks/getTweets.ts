@@ -2,10 +2,10 @@
 import { MongoClient } from 'mongodb';
 import { processTweet } from '../lib/processTweet';
 import { magenta } from 'colors';
+import https from 'https';
 
 import Twit from 'twit';
 import { CronJob } from 'cron';
-import https from 'https';
 
 const mlab_username = process.env.MLAB_USERNAME
 const mlab_password = process.env.MLAB_PASSWORD
@@ -23,7 +23,7 @@ const T = new Twit({
   //const connection = await MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true });
   const connection = await MongoClient.connect(`mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`, { useNewUrlParser: true });
 
-  const db = connection.db('ng-tweets');
+  const db = await connection.db('ng-tweets');
   console.log('Connected');
   //const trackedTerms = ['GSWAI'];
   //const stream = T.stream('statuses/filter', {
@@ -68,6 +68,18 @@ const T = new Twit({
   //  connection.close();
   //});
 
+  new CronJob({
+    cronTime: '00 */4 * * *',
+    onTick: async function () {
+      /*
+       * At every 6 minutes
+       */
+      await processTweet.searchNews(db)
+    },
+    start: true,
+    timeZone: 'Europe/Paris'
+  });
+
   const result = await processTweet.searchTweets(db, T, 'GSWAI');
   console.log(result);
   new CronJob({
@@ -89,7 +101,7 @@ const T = new Twit({
        * At every 15th minute past every hour from 6 through 23.
        */
       https.get(`https://ng-tweet.herokuapp.com/api/stream/hashtag`, (resp) => {
-        resp.on('data', (chunk) => {});
+        resp.on('data', () => {});
         // The whole response has been received. Print out the result.
         resp.on('end', () => {});
       }).on('error', (err) => {

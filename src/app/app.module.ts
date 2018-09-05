@@ -12,6 +12,8 @@ import { MomentModule } from 'angular2-moment';
 import { HashtagsComponent } from './hashtags/hashtags.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MessagesComponent } from './messages/messages.component';
+import { NewsComponent } from './news/news.component';
+import { AppRoutingModule } from './/app-routing.module';
 
 @NgModule({
   declarations: [
@@ -21,14 +23,16 @@ import { MessagesComponent } from './messages/messages.component';
     TweetPipe,
     HashtagsComponent,
     MessagesComponent,
-    MapsvgComponent
+    MapsvgComponent,
+    NewsComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MomentModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

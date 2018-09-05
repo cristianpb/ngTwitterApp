@@ -91,12 +91,26 @@
       </nav>
     </div>
   </div>
+   <div class="hero-foot">
+    <nav class="tabs is-boxed">
+      <div class="container">
+        <ul>
+          <li class="is-active">
+            <a routerLink="/dashboard">Dashboard</a>
+          </li>
+          <li>
+            <a routerLink="/news">News</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 </section>
 
 
 <section class="section">
   <div class="container">
-    <app-tweets></app-tweets>
+      <router-outlet></router-outlet>
   </div>
 </section>
 

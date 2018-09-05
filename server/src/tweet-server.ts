@@ -85,6 +85,12 @@ export class TweetServer {
       })
     });
 
+    this.app.get('/api/news', (req: Request, res: Response) => {
+      this.getNews().then(( docs ) => {
+        res.json({'data': docs});
+      })
+    });
+
     this.app.get('/messages', (req: Request, res: Response) => {
       //const repository = new MessageRepository(this.db, 'messages');
       //const count = repository.countMessages();
@@ -130,6 +136,13 @@ export class TweetServer {
 
   private async writeMessage (message: string) {
     let res1 = await this.db.collection('messages').insertOne({ message: message, timestamp: + new Date()})
+    return res1
+  }
+
+  private async getNews () {
+    let res1 = await this.db.collection('news')
+      .find({})
+      .toArray()
     return res1
   }
 
