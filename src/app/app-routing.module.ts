@@ -6,10 +6,7 @@ import { NewsComponent } from './news/news.component';
 import { TweetsComponent } from './tweets/tweets.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: TweetsComponent },
-  { path: 'news', component: NewsComponent },
-  { path: '**', component: TweetsComponent }
+  { path: '', component: TweetsComponent},
 ];
  
 @NgModule({
