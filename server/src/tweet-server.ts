@@ -57,6 +57,12 @@ export class TweetServer {
     this.app.get('/', (req,res) => {
       res.sendFile(path.join(__dirname, '../../dist/index.html'))
     });
+    this.app.get('/dashboard', (req,res) => {
+      res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    });
+    this.app.get('/news', (req,res) => {
+      res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    });
   }
 
   private routes(): void {
