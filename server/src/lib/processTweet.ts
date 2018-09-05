@@ -2,9 +2,12 @@
 import { MongoClient, Db, Collection, InsertOneWriteOpResult } from 'mongodb';
 import { TweetRepository } from '../repositories/TweetRepository'
 import { Tweet } from '../entities/tweet';
+import { Article } from '../entities/article';
 import { rawTweet } from '../entities/rawTweet';
 import { magenta, red, blue, yellow, green } from 'colors';
 import moment from 'moment';
+import https from 'https';
+const newsapi_key = process.env.NEWSAPI_KEY
 
 export class processTweet {
   static saveTweets = async function (db: Db, data: rawTweet) {
@@ -115,6 +118,26 @@ export class processTweet {
     });
     return 'Processed tweets'
   };
+
+  static searchNews = async (db: Db) => {
+    https.get(`https://newsapi.org/v2/everything?q=intelligence%20artificielle&apiKey=${newsapi_key}&sortBy=publishedAt`, (resp) => {
+      resp.setEncoding('utf8');
+      resp.on('data', async (chunk: string) => {
+        await db.dropCollection('news')
+        processTweet.processNews(db, JSON.parse(chunk).articles)
+      });
+      resp.on('end', () => {});
+    }).on('error', (err) => {
+      console.log('Error: ' + err.message);
+    });
+  }
+
+  static processNews = async (db: Db, articles: Article[]) => {
+    articles.forEach(async (article) => {
+      await db.collection('news').insertOne(article)
+    })
+  }
+
 }
 
 interface SetTags {

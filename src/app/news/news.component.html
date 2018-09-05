@@ -1,0 +1,25 @@
+<div class="columns is-multiline">
+<div class="column is-4" *ngFor="let user of articles">
+    <div class="card">
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <a href="{{ user.url }}">
+            <img src="{{ user.urlToImage }}"/>
+          </a>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="media">
+          <div class="media-content">
+            <a href="{{ user.url }}" ><p class="title is-4">{{ user.title }}</p></a>
+            <a href="{{ user.url }}" ><p class="subtitle is-6">@{{ user.source.name }}</p></a>
+          </div>
+        </div>
+        <div class="content">
+          <p><small>{{user.description}}</small></p>
+          <p>{{ user.publishedAt | amUtc | amTimeAgo }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
