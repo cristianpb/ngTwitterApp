@@ -123,7 +123,7 @@ export class processTweet {
     https.get(`https://newsapi.org/v2/everything?q=intelligence%20artificielle&apiKey=${newsapi_key}&sortBy=publishedAt`, (resp) => {
       resp.setEncoding('utf8');
       resp.on('data', async (chunk: string) => {
-        await db.collection('news').remove()
+        await db.collection('news').deleteMany({});
         processTweet.processNews(db, JSON.parse(chunk).articles)
       });
       resp.on('end', () => {});
