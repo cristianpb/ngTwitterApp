@@ -29,7 +29,7 @@ export class ProcessFacebook {
         data.push(d);
       });
       res.on('end', () => {
-        const content = { message: JSON.parse(data).data[0].description, link: JSON.parse(data).data[4].url}
+        const content = { message: JSON.parse(data).data[0].description, link: JSON.parse(data).data[0].url}
         FB.api('cityaiparis/feed', 'post', content, function (res: any) {
           if (!res || res.error) {
             console.log(!res ? 'error occurred' : res.error);

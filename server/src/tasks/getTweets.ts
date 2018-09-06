@@ -71,7 +71,7 @@ const T = new Twit({
 
   await ProcessFacebook.postNews();
   new CronJob({
-    cronTime: '00 */4 * * *',
+    cronTime: '05 */4 * * *',
     onTick: async function () {
       await ProcessFacebook.postNews();
     },
