@@ -2,6 +2,7 @@ import { createServer, Server } from 'http';
 import { Request, Response } from 'express';
 import express from 'express';
 import path from 'path';
+const graph = require('fbgraph');
 
 import { MongoClient } from 'mongodb';
 import { MessageRepository } from './repositories/MessageRepository';
@@ -101,6 +102,41 @@ export class TweetServer {
       this.getNews('news_fr').then(( docs ) => {
         res.json({'data': docs});
       });
+    });
+
+    this.app.get('/auth', function(req, res) {
+
+      if (!req.query.code) {
+        console.log('Performing oauth for some user right now.');
+
+        const authUrl = graph.getOauthUrl({
+          'client_id':     process.env.FACEBOOK_CLIENT_ID,
+          'redirect_uri':  'https://ng-tweet.herokuapp.com/auth',
+          'scope':         'email, user_about_me, user_birthday, user_location, publish_actions'
+        });
+
+        if (!req.query.error) {
+          res.redirect(authUrl);
+        } else {
+          res.send('access denied');
+        }
+      }
+
+      else {
+        console.log('Oauth successful, the code (whatever it is) is: ', req.query.code);
+        graph.authorize({
+          'client_id':      process.env.FACEBOOK_CLIENT_ID,
+          'redirect_uri':   'https://ng-tweet.herokuapp.com/auth',
+          'client_secret':  process.env.FACEBOOK_CLIENT_SECRET,
+          'code':           req.query.code
+        }, function (err: any, facebookRes: any) {
+          res.redirect('/UserHasLoggedIn');
+        });
+      }
+    });
+
+    this.app.get('/UserHasLoggedIn', function(req, res) {
+      res.send('Logged In');
     });
 
     this.app.get('/messages', (req: Request, res: Response) => {
