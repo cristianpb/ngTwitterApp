@@ -89,7 +89,7 @@ export class TweetServer {
     this.app.post('/api/write', (req: Request, res: Response) => {
       this.writeMessage(req.body.message).then(( result1 ) => {
         res.json({message: 'ok'});
-      })
+      });
     });
 
     this.app.get('/api/news', (req: Request, res: Response) => {
@@ -111,8 +111,7 @@ export class TweetServer {
 
         const authUrl = graph.getOauthUrl({
           'client_id':     process.env.FACEBOOK_CLIENT_ID,
-          'redirect_uri':  'https://ng-tweet.herokuapp.com/auth',
-          'scope':         'email, user_about_me, user_birthday, user_location, publish_actions'
+          'redirect_uri':  'https://ng-tweet.herokuapp.com/auth'
         });
 
         if (!req.query.error) {
@@ -146,44 +145,44 @@ export class TweetServer {
       //const messageSear = new Message('', 1);
       //const mess = repository.find(messageSear);
       this.getMessages()
-        .then((counted:any) => {
+        .then((counted: any) => {
           console.log('count', counted);
           res.send(counted);
-        })
+        });
     });
   }
 
 
   private async getTweets (page: number, skip: number) {
-    let start = (page * 9) + (skip * 1)
-    let docs = await this.db.collection('tweets')
-      .find({},{skip: start})
+    const start = (page * 9) + (skip * 1);
+    const docs = await this.db.collection('tweets')
+      .find({}, {skip: start})
       .sort({twid: -1})
       .limit(9)
-      .toArray()
-    return docs
+      .toArray();
+    return docs;
   }
 
   private async getHashtags () {
-    let docs = await this.db.collection('hashtags')
+    const docs = await this.db.collection('hashtags')
       .find({"label":{"$in":["#swaiparis", "#swailapaz", "#swaihongkong", "#swaisydney", "#swaicarthage", "#swaibruxelles", "#swaiyaounde", "#swailima", "#swaiistanbul", "#swaitaipei", "#swaimexico", "#swaiantananarivo"]}})
       .sort({value: -1})
       .limit(15)
-      .toArray()
-    return docs
+      .toArray();
+    return docs;
   }
 
   private async getMessages () {
-    let docs = await this.db.collection('messages')
+    const docs = await this.db.collection('messages')
       .find({})
       .sort({timestamp: -1})
       .limit(3)
       .toArray();
-    return docs
+    return docs;
   }
 
   private async writeMessage (message: string) {
-    const res1 = await this.db.collection('messages').insertOne({ message: message, timestamp: + new Date()})
+    const res1 = await this.db.collection('messages').insertOne({ message: message, timestamp: + new Date()});
     return res1;
   }
 

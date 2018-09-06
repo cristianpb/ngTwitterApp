@@ -69,26 +69,36 @@ const T = new Twit({
   //  connection.close();
   //});
 
-  await ProcessFacebook.postNews();
+  await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news`);
   new CronJob({
-    cronTime: '05 */4 * * *',
+    cronTime: '05 */6 * * *',
     onTick: async function () {
-      await ProcessFacebook.postNews();
+      await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news`);
     },
     start: true,
     timeZone: 'Europe/Paris'
   });
 
-  await processTweet.searchNews(db, 'news_fr', 'intelligence%20artificielle%20paris');
-  await processTweet.searchNews(db, 'news', 'artificial%20intelligence%20paris');
+  await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news_fr`);
+  new CronJob({
+    cronTime: '05 */4 * * *',
+    onTick: async function () {
+      await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news_fr`);
+    },
+    start: true,
+    timeZone: 'Europe/Paris'
+  });
+
+  await processTweet.searchNews(db, 'news_fr', '+intelligence%20AND%20+artificielle%20AND%20(paris%20OR%20france)%20-smartphone');
+  await processTweet.searchNews(db, 'news', '+artificial%20AND%20+intelligence%20AND%20(paris%20OR%20france)%20-smartphone');
   new CronJob({
     cronTime: '00 */4 * * *',
     onTick: async function () {
       /*
        * At every 6 minutes
        */
-      await processTweet.searchNews(db, 'news_fr', 'intelligence%20artificielle%20paris');
-      await processTweet.searchNews(db, 'news', 'artificial%20intelligence%20paris');
+      await processTweet.searchNews(db, 'news_fr', '+intelligence%20AND%20+artificielle%20AND%20(paris%20OR%20france)%20-smartphone');
+      await processTweet.searchNews(db, 'news', '+artificial%20AND%20+intelligence%20AND%20(paris%20OR%20france)%20-smartphone');
     },
     start: true,
     timeZone: 'Europe/Paris'

@@ -1,7 +1,6 @@
 const graph = require('fbgraph');
-import https from 'https';
-
-graph.setAccessToken({'accessToken': process.env.FACEBOOK_ACCESSTOKEN});
+const axios = require('axios');
+graph.setAccessToken(process.env.FACEBOOK_ACCESSTOKEN);
 
 export class ProcessFacebook {
   static extendToken = function (temporalToken: string) {
@@ -14,27 +13,32 @@ export class ProcessFacebook {
     });
   };
 
-  static postNews = function () {
-    const data: string[] = [];
-    https.get('https://ng-tweet.herokuapp.com/api/news', (res) => {
-      res.setEncoding('utf8');
-      res.on('data', (d) => {
-        data.push(d);
-      });
-      res.on('end', () => {
-        const content = { message: JSON.parse(data.join()).data[0].description, link: JSON.parse(data.join()).data[0].url};
-        //graph.post('cityaiparis/feed', content, function (res: any) {
-        //  if (!res || res.error) {
-        //    console.log(!res ? 'error occurred' : res.error);
-        //    return;
-        //  }
-        //  console.log('Post Id: ' + res.id);
-        //});
-      }).on('error', (e) => {
-        console.error(e);
-      });
+  static postNews = async function (url: string) {
+    const article = await ProcessFacebook.getArticle(url);
+    const content = { message: article.description, link: article.url};
+    console.log(content);
+    graph.post('cityaiparis/feed', content, function (err: any, res: any) {
+      if (!err) {
+        console.log('Post Id: ' + res.id);
+      } else {
+      console.log(err);
+      }
     });
   };
+
+  static getArticle = async function (url: string) {
+    const news = await axios.get(url);
+    const posts: any = await ProcessFacebook.getPost;
+    const postsArray = await posts.data.map((element: any) => element.message);
+    const result = await news.data.data.filter((article: any) => postsArray.indexOf(article.description) === -1);
+    return result[0];
+  };
+
+  static getPost = new Promise ((resolve, reject) => {
+    graph.get('cityaiparis/posts', function(err: any, res: any) {
+      resolve(res);
+    });
+  });
 
 //FB.api('cityaiparis?fields=access_token', function (res) {
 //  if(!res || res.error) {
