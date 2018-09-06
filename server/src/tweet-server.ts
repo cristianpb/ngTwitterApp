@@ -92,9 +92,15 @@ export class TweetServer {
     });
 
     this.app.get('/api/news', (req: Request, res: Response) => {
-      this.getNews().then(( docs ) => {
+      this.getNews('news').then(( docs ) => {
         res.json({'data': docs});
-      })
+      });
+    });
+
+    this.app.get('/api/news_fr', (req: Request, res: Response) => {
+      this.getNews('news_fr').then(( docs ) => {
+        res.json({'data': docs});
+      });
     });
 
     this.app.get('/messages', (req: Request, res: Response) => {
@@ -136,20 +142,20 @@ export class TweetServer {
       .find({})
       .sort({timestamp: -1})
       .limit(3)
-      .toArray()
+      .toArray();
     return docs
   }
 
   private async writeMessage (message: string) {
-    let res1 = await this.db.collection('messages').insertOne({ message: message, timestamp: + new Date()})
-    return res1
+    const res1 = await this.db.collection('messages').insertOne({ message: message, timestamp: + new Date()})
+    return res1;
   }
 
-  private async getNews () {
-    let res1 = await this.db.collection('news')
+  private async getNews (name: string) {
+    const res1 = await this.db.collection(name)
       .find({})
-      .toArray()
-    return res1
+      .toArray();
+    return res1;
   }
 
   //private async getMessages () {

@@ -119,12 +119,12 @@ export class processTweet {
     return 'Processed tweets'
   };
 
-  static searchNews = async (db: Db) => {
-    https.get(`https://newsapi.org/v2/everything?q=intelligence%20artificielle&apiKey=${newsapi_key}&sortBy=publishedAt`, (resp) => {
+  static searchNews = async (db: Db, collection: string, query: string) => {
+    https.get(`https://newsapi.org/v2/everything?q=${query}&apiKey=${newsapi_key}&sortBy=publishedAt`, (resp) => {
       resp.setEncoding('utf8');
       resp.on('data', async (chunk: string) => {
-        await db.collection('news').deleteMany({});
-        processTweet.processNews(db, JSON.parse(chunk).articles)
+        await db.collection(collection).deleteMany({});
+        processTweet.processNews(db, JSON.parse(chunk).articles, collection);
       });
       resp.on('end', () => {});
     }).on('error', (err) => {
@@ -132,10 +132,10 @@ export class processTweet {
     });
   }
 
-  static processNews = async (db: Db, articles: Article[]) => {
+  static processNews = async (db: Db, articles: Article[], collection: string) => {
     articles.forEach(async (article) => {
-      await db.collection('news').insertOne(article)
-    })
+      await db.collection(collection).insertOne(article);
+    });
   }
 
 }

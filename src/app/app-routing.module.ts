@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'news', component: NewsComponent },
   { path: '**', component: TweetsComponent }
 ];
- 
+
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ]

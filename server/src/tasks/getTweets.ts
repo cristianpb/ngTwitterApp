@@ -1,6 +1,7 @@
 // importing mongoClient to connect at mongodb
 import { MongoClient } from 'mongodb';
 import { processTweet } from '../lib/processTweet';
+import { ProcessFacebook } from '../lib/facebookPost';
 import { magenta } from 'colors';
 import https from 'https';
 
@@ -68,14 +69,26 @@ const T = new Twit({
   //  connection.close();
   //});
 
-  await processTweet.searchNews(db)
+  await ProcessFacebook.postNews();
+  new CronJob({
+    cronTime: '00 */4 * * *',
+    onTick: async function () {
+      await ProcessFacebook.postNews();
+    },
+    start: true,
+    timeZone: 'Europe/Paris'
+  });
+
+  await processTweet.searchNews(db, 'news_fr', 'intelligence%20artificielle%20paris');
+  await processTweet.searchNews(db, 'news', 'artificial%20intelligence%20paris');
   new CronJob({
     cronTime: '00 */4 * * *',
     onTick: async function () {
       /*
        * At every 6 minutes
        */
-      await processTweet.searchNews(db)
+      await processTweet.searchNews(db, 'news_fr', 'intelligence%20artificielle%20paris');
+      await processTweet.searchNews(db, 'news', 'artificial%20intelligence%20paris');
     },
     start: true,
     timeZone: 'Europe/Paris'
