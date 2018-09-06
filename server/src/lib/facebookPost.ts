@@ -36,12 +36,6 @@ export class ProcessFacebook {
     });
   };
 
-  static search = function () {
-    graph.get("zuck", function(err, res) {
-      console.log(res); // { id: '4', name: 'Mark Zuckerberg'... }
-    });
-  }
-
 //FB.api('cityaiparis?fields=access_token', function (res) {
 //  if(!res || res.error) {
 //   console.log(!res ? 'error occurred' : res.error);
