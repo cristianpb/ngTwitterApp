@@ -69,9 +69,9 @@ const T = new Twit({
   //  connection.close();
   //});
 
-  await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news`);
   new CronJob({
-    cronTime: '05 */6 * * *',
+    // At 12:05 on every day-of-week from Sunday through Friday.
+    cronTime: '05 12 * * 0-5',
     onTick: async function () {
       await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news`);
     },
@@ -79,9 +79,9 @@ const T = new Twit({
     timeZone: 'Europe/Paris'
   });
 
-  await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news_fr`);
   new CronJob({
-    cronTime: '05 */4 * * *',
+    // At 08:05 on every day-of-week from Sunday through Friday.
+    cronTime: '5 8 * * 0-5',
     onTick: async function () {
       await ProcessFacebook.postNews(`https://ng-tweet.herokuapp.com/api/news_fr`);
     },
