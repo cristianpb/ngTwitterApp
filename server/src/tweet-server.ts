@@ -104,6 +104,12 @@ export class TweetServer {
       });
     });
 
+    this.app.get('/api/news_gswai', (req: Request, res: Response) => {
+      this.getNews('news_gswai').then(( docs ) => {
+        res.json({'data': docs});
+      });
+    });
+
     this.app.get('/auth', function(req, res) {
 
       if (!req.query.code) {

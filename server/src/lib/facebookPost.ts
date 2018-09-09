@@ -1,11 +1,21 @@
-const graph = require('fbgraph');
 const axios = require('axios');
-graph.setAccessToken(process.env.FACEBOOK_ACCESSTOKEN);
+const graph = require('fbgraph');
+const FB = require('fb').default;
 
 export class ProcessFacebook {
+  token: string;
+  facebook_page: string;
+  news_url: string;
+
+  constructor(token: string, facebook_page: string, news_url: string) {
+    this.token = token;
+    this.facebook_page = facebook_page;
+    this.news_url = news_url;
+  }
+
   static extendToken = function (temporalToken: string) {
     graph.extendAccessToken({
-      'access_token':    temporalToken,
+      'access_token': temporalToken,
       'client_id': process.env.FACEBOOK_CLIENT_ID,
       'client_secret':  process.env.FACEBOOK_CLIENT_SECRET
     }, function (err: any, facebookRes: any) {
@@ -13,56 +23,24 @@ export class ProcessFacebook {
     });
   };
 
-  static postNews = async function (url: string) {
-    const article = await ProcessFacebook.getArticle(url);
-    const content = { message: article.description, link: article.url};
+  postNews = async () => {
+    FB.options({accessToken: this.token});
+    const article = await this.getArticle();
+    if (article) {
+    const content = await { message: article.description, link: article.url};
     console.log(content);
-    graph.post('cityaiparis/feed', content, function (err: any, res: any) {
-      if (!err) {
-        console.log('Post Id: ' + res.id);
-      } else {
-      console.log(err);
-      }
-    });
+    const res = await FB.api(`${this.facebook_page}/feed`, 'post', content)
+    console.log('Published, post Id: ' + res.id);
+    }
   };
 
-  static getArticle = async function (url: string) {
-    const news = await axios.get(url);
-    const posts: any = await ProcessFacebook.getPost;
-    const postsArray = await posts.data.map((element: any) => element.message);
+  getArticle = async function () {
+    FB.options({accessToken: this.token});
+    const news = await axios.get(this.news_url);
+    const response = await FB.api(`${this.facebook_page}/posts`);
+    const postsArray = await response.data.map((element: any) => element.message);
     const result = await news.data.data.filter((article: any) => postsArray.indexOf(article.description) === -1);
     return result[0];
   };
-
-  static getPost = new Promise ((resolve, reject) => {
-    graph.get('cityaiparis/posts', function(err: any, res: any) {
-      resolve(res);
-    });
-  });
-
-//FB.api('cityaiparis?fields=access_token', function (res) {
-//  if(!res || res.error) {
-//   console.log(!res ? 'error occurred' : res.error);
-//   return;
-//  }
-//  console.log(res);
-//});
-
-//FB.api('cityaiparis/posts', function (res) {
-//  if(!res || res.error) {
-//   console.log(!res ? 'error occurred' : res.error);
-//   return;
-//  }
-//  console.log(res);
-//});
-
-//var postId = '178795452811011_238675936822962';
-//FB.api(postId, 'delete', function (res) {
-//  if(!res || res.error) {
-//    console.log(!res ? 'error occurred' : res.error);
-//    return;
-//  }
-//  console.log('Post was deleted');
-//});
 
 }

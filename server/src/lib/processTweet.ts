@@ -6,7 +6,7 @@ import { Article } from '../entities/article';
 import { rawTweet } from '../entities/rawTweet';
 import { magenta, red, blue, yellow, green } from 'colors';
 import moment from 'moment';
-import https from 'https';
+const axios = require('axios');
 const newsapi_key = process.env.NEWSAPI_KEY
 
 export class processTweet {
@@ -119,17 +119,11 @@ export class processTweet {
     return 'Processed tweets'
   };
 
-  static searchNews = async (db: Db, collection: string, query: string) => {
-    https.get(`https://newsapi.org/v2/everything?q=${query}&apiKey=${newsapi_key}&sortBy=publishedAt`, (resp) => {
-      resp.setEncoding('utf8');
-      resp.on('data', async (chunk: string) => {
-        await db.collection(collection).deleteMany({});
-        processTweet.processNews(db, JSON.parse(chunk).articles, collection);
-      });
-      resp.on('end', () => {});
-    }).on('error', (err) => {
-      console.log('Error: ' + err.message);
-    });
+  static searchNews = async (db: Db, collection: string, query: string, endpoint: string) => {
+    const resp = await axios.get(`https://newsapi.org/v2/${endpoint}?q=${query}&apiKey=${newsapi_key}&sortBy=publishedAt`);
+    console.log(resp.data.articles);
+    await db.collection(collection).deleteMany({});
+    processTweet.processNews(db, resp.data.articles, collection);
   }
 
   static processNews = async (db: Db, articles: Article[], collection: string) => {
