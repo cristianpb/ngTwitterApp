@@ -35,6 +35,13 @@ export class TweetComponent {
     return false;
   }
 
+  hasRetweet(tweet: Tweet) {
+    if (tweet.retweet_count > 0) {
+        return true;
+    }
+    return false;
+  }
+
   hasFavorite(tweet: Tweet) {
     if (tweet.favorite_count > 0) {
         return true;

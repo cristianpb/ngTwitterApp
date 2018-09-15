@@ -25,7 +25,16 @@
       <!--
       <time datetime="{{ '01/05/2017' | amParse:'DD/MM/YYYY' | amDateFormat:'YYYY-MM-DD' }}">{{ tweet.created_at |  amTimeAgo}}</time>
       -->
-      <p>{{ tweet.date | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</p>
+      <div class="tags has-addons">
+        <span class="tag">{{ tweet.date | amParse: 'ddd MMM DD HH:mm:ss ZZ YYYY' | amTimeAgo }}</span>
+        <span class="tag"  *ngIf="hasRetweet(tweet)">
+          <fa-icon [icon]="faRetweet"></fa-icon>   {{ tweet.retweet_count }}
+        </span>
+        <span class="tag" *ngIf="hasFavorite(tweet)">
+          <fa-icon [icon]="faThumbsUp"></fa-icon>   {{ tweet.favorite_count }} 
+        </span>
+      </div>
+            
     </div>
   </div>
 </div>
@@ -82,7 +91,7 @@
             <fa-icon [icon]="faThumbsUp"></fa-icon>   {{ tweet.favorite_count }} 
           </p>
 
-          <p class="card-footer-item" *ngIf="hasFavorite(tweet)">
+          <p class="card-footer-item" *ngIf="hasRetweet(tweet)">
             <fa-icon [icon]="faRetweet"></fa-icon>   {{ tweet.retweet_count }}
           </p>
 

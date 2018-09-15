@@ -171,7 +171,7 @@ export class TweetServer {
 
   private async getHashtags () {
     const docs = await this.db.collection('hashtags')
-      .find({"label":{"$in":["#swaiparis", "#swailapaz", "#swaihongkong", "#swaisydney", "#swaicarthage", "#swaibruxelles", "#swaiyaounde", "#swailima", "#swaiistanbul", "#swaitaipei", "#swaimexico", "#swaiantananarivo"]}})
+      .find({"label":{"$in":["#swaiparis", "#swailapaz", "#swaihongkong", "#swaisydney", "#swaicarthage", "#swaibrussels", "#swaiyaounde", "#swailima", "#swaiistanbul", "#swaitaipei", "#swaimexico", "#swaiantananarivo"]}})
       .sort({value: -1})
       .limit(15)
       .toArray();
