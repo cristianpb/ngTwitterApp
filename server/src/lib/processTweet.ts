@@ -1,137 +1,121 @@
 // importing mongoClient to connect at mongodb
 import { MongoClient, Db, Collection, InsertOneWriteOpResult } from 'mongodb';
-import { TweetRepository } from '../repositories/TweetRepository'
+import { TweetRepository } from '../repositories/TweetRepository';
 import { Tweet } from '../entities/tweet';
 import { Article } from '../entities/article';
 import { rawTweet } from '../entities/rawTweet';
 import { magenta, red, blue, yellow, green } from 'colors';
 import moment from 'moment';
-const axios = require('axios');
-const newsapi_key = process.env.NEWSAPI_KEY
 
-export class processTweet {
+export class ProcessTweet {
   static saveTweets = async function (db: Db, data: rawTweet) {
-    let tweet = await new Tweet(data);
+    const tweet = await new Tweet(data);
     try {
-      const isBan = await processTweet.isBanned(tweet.body);
+      const isBan = await ProcessTweet.isBanned(tweet.body);
       if (isBan) {
         return red(`Banned ${tweet.body}`);
       } else {
-        let repository = new TweetRepository(db, 'tweets');
+        const repository = new TweetRepository(db, 'tweets');
         const result = await repository.create(tweet);
-        await processTweet.saveMetadata(db, tweet)
-        return green(`Saved ${tweet.twid}`)
+        await ProcessTweet.saveMetadata(db, tweet);
+        return green(`Saved ${tweet.twid}`);
       }
-    } catch(err) {
+    } catch (err) {
       if (err.code === 11000) {
-        let repository = new TweetRepository(db, 'tweets');
+        const repository = new TweetRepository(db, 'tweets');
         const result = await repository.updateTweet(tweet.twid, tweet);
-        return blue(`Updated ${result}`)
+        return blue(`Updated ${result}`);
       } else {
-        throw new Error(err)
+        throw new Error(err);
       }
-    };
+    }
   };
 
   static isBanned = async function (text: string) {
-    let bannedTerms = await ['#sex', '#porn', '#porno', 'porn', 'sex', 'porno', 'sexo'].join('|')
-    let regex2 = await new RegExp(`(?:^|(?<= ))(${bannedTerms})(?:(?= )|$)`, 'gim');
+    const bannedTerms = await ['#sex', '#porn', '#porno', 'porn', 'sex', 'porno', 'sexo'].join('|');
+    const regex2 = await new RegExp(`(?:^|(?<= ))(${bannedTerms})(?:(?= )|$)`, 'gim');
     if (!(regex2.test(text))) {
-      return false
-    } else { 
-      return true
+      return false;
+    } else {
+      return true;
     }
-  }
+  };
 
   static saveMetadata = async function  (db: Db, tweet: Tweet) {
-    const msg3 = processTweet.saveHashtag(db, tweet, /#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/gm, 'hashtag')
-    const msg4 = processTweet.saveHashtag(db, tweet, /@(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/gm, 'mention')
-  }
+    const msg3 = ProcessTweet.saveHashtag(db, tweet, /#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/gm, 'hashtag');
+    const msg4 = ProcessTweet.saveHashtag(db, tweet, /@(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/gm, 'mention');
+  };
 
   static saveHashtag = async function  (db: Db, tweet: Tweet, reg: RegExp, annotationType: string) {
-    let hashtags = await tweet.body.match(reg);
-    let updateVal: SetTags = await {};
+    const hashtags = await tweet.body.match(reg);
+    const updateVal: SetTags = await {};
     if (annotationType === 'mention') {
-      updateVal.mentions = hashtags
+      updateVal.mentions = hashtags;
     }
     if (annotationType === 'hashtag') {
-      updateVal.hashtags = hashtags
+      updateVal.hashtags = hashtags;
     }
     if (hashtags) {
       console.log('Text: ', tweet.body, '\n', annotationType, ': ', hashtags);
       if (hashtags.length > 0) {
         try {
           await db.collection('tweets').findOneAndUpdate(
-            {"twid": tweet.twid},
+            {'twid': tweet.twid},
             { $set: updateVal}
-          )
-          console.log(`updated tweet ${tweet.twid}`)
-          hashtags.forEach(tag => processTweet.processHashtag(db, tag, hashtags, annotationType))
+          );
+          console.log(`updated tweet ${tweet.twid}`);
+          hashtags.forEach(tag => ProcessTweet.processHashtag(db, tag, hashtags, annotationType));
         } catch (err) {
-          console.log('Tweet update error', err)
+          console.log('Tweet update error', err);
         }
       }
     } else {
       console.log(yellow(`Text: ${tweet.body} \nNo ${annotationType}`));
     }
-  }
+  };
 
   static processHashtag = async function  (db: Db, tag: string, hashtags: RegExpMatchArray, annotationType: string) {
-    let norm_tag = await tag.toLowerCase()
-    let docs = await db.collection('hashtags')
+    const norm_tag = await tag.toLowerCase();
+    const docs = await db.collection('hashtags')
       .find({'label': norm_tag , 'type': annotationType})
-      .toArray()
+      .toArray();
     if ( docs.length === 0 ) {
-      let res1 = db.collection('hashtags').insertOne({'type': annotationType, 'label': norm_tag, 'value': 1})
+      const res1 = db.collection('hashtags').insertOne({'type': annotationType, 'label': norm_tag, 'value': 1});
       console.log('Creating tag: ', norm_tag);
     } else {
       try {
         await db.collection('hashtags').findOneAndUpdate(
           { 'label': norm_tag, 'type': annotationType },
-          { $inc: { "value" : 1 }}
-        )
-        console.log('updated hashtag: ', norm_tag)
+          { $inc: { 'value' : 1 }}
+        );
+        console.log('updated hashtag: ', norm_tag);
       } catch (err) {
-        console.log('Hash update error', err)
+        console.log('Hash update error', err);
       }
     }
   };
 
   static searchTweets = async function (db: Db, T: any, trackTerm: string) {
     const enddate = moment().subtract(2, 'days').format('YYYY-MM-DD');
-    let result = await T.get('search/tweets', {
+    const result = await T.get('search/tweets', {
       q: trackTerm,
-      //until: enddate,
+      // until: enddate,
       count: 50,
       result_type: 'mixed',
       tweet_mode: 'extended'
-    })
-    if (result.data.statuses.length === 0) return 'Zero tweets found'
+    });
+    if (result.data.statuses.length === 0) return 'Zero tweets found';
     console.log(`Total tweets ${result.data.statuses.length}`);
     await result.data.statuses.forEach(async function (tweet: rawTweet) {
       if (!('retweeted_status' in tweet)) {
-        const msg = await processTweet.saveTweets(db, tweet);
+        const msg = await ProcessTweet.saveTweets(db, tweet);
         console.log(msg);
       } else {
         console.log(red(`Retweet ${tweet.retweeted_status.user.screen_name}`));
       }
     });
-    return 'Processed tweets'
+    return 'Processed tweets';
   };
-
-  static searchNews = async (db: Db, collection: string, query: string, endpoint: string) => {
-    const resp = await axios.get(`https://newsapi.org/v2/${endpoint}?q=${query}&apiKey=${newsapi_key}&sortBy=publishedAt`);
-    console.log(resp.data.articles);
-    await db.collection(collection).deleteMany({});
-    processTweet.processNews(db, resp.data.articles, collection);
-  }
-
-  static processNews = async (db: Db, articles: Article[], collection: string) => {
-    articles.forEach(async (article) => {
-      await db.collection(collection).insertOne(article);
-    });
-  }
-
 }
 
 

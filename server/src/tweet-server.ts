@@ -2,19 +2,15 @@ import { createServer, Server } from 'http';
 import { Request, Response } from 'express';
 import express from 'express';
 import path from 'path';
+import { environment } from './environment';
 const graph = require('fbgraph');
 
 import { MongoClient } from 'mongodb';
 import { MessageRepository } from './repositories/MessageRepository';
 import { Message } from './entities/message';
 
-const mlab_username = process.env.MLAB_USERNAME
-const mlab_password = process.env.MLAB_PASSWORD
-const mongourl = `mongodb://${mlab_username}:${mlab_password}@ds111192.mlab.com:11192/ng-tweets`;
-//const mongourl = 'mongodb://localhost:27017/ng-tweets';
-
 export class TweetServer {
-  public static readonly PORT:number = 3001;
+  public static readonly PORT: number = 3001;
   private app: express.Application;
   private server: Server;
   private port: string | number;
@@ -32,7 +28,7 @@ export class TweetServer {
 
   private mongoConnect(): void {
     console.log('Connected');
-    MongoClient.connect(mongourl).then(
+    MongoClient.connect(environment.mongourl).then(
       connection => {
       this.db = connection.db('ng-tweets');
       }
@@ -55,14 +51,14 @@ export class TweetServer {
     this.app.use(require('cors')());
     this.app.use(require('body-parser').json());
     this.app.use(express.static(path.join(__dirname, '../../dist')));
-    this.app.get('/', (req,res) => {
-      res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    this.app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../dist/index.html'));
     });
-    this.app.get('/dashboard', (req,res) => {
-      res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    this.app.get('/dashboard', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../dist/index.html'));
     });
-    this.app.get('/news', (req,res) => {
-      res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    this.app.get('/news', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../dist/index.html'));
     });
   }
 
@@ -70,78 +66,26 @@ export class TweetServer {
     this.app.get('/api/tweets/:page', (req: Request, res: Response) => {
       this.getTweets(Number(req.params.page), 0).then(( tweets ) => {
         res.json({'data': tweets});
-      })
+      });
     });
 
     this.app.get('/api/stream/hashtag', (req, res) => {
       this.getHashtags().then(( docs ) => {
         res.json({'data': docs});
-      })
+      });
     });
 
 
     this.app.get('/api/read', (req, res) => {
       this.getMessages().then(( docs ) => {
         res.json({'data': docs});
-      })
+      });
     });
 
     this.app.post('/api/write', (req: Request, res: Response) => {
       this.writeMessage(req.body.message).then(( result1 ) => {
         res.json({message: 'ok'});
       });
-    });
-
-    this.app.get('/api/news', (req: Request, res: Response) => {
-      this.getNews('news').then(( docs ) => {
-        res.json({'data': docs});
-      });
-    });
-
-    this.app.get('/api/news_fr', (req: Request, res: Response) => {
-      this.getNews('news_fr').then(( docs ) => {
-        res.json({'data': docs});
-      });
-    });
-
-    this.app.get('/api/news_gswai', (req: Request, res: Response) => {
-      this.getNews('news_gswai').then(( docs ) => {
-        res.json({'data': docs});
-      });
-    });
-
-    this.app.get('/auth', function(req, res) {
-
-      if (!req.query.code) {
-        console.log('Performing oauth for some user right now.');
-
-        const authUrl = graph.getOauthUrl({
-          'client_id':     process.env.FACEBOOK_CLIENT_ID,
-          'redirect_uri':  'https://ng-tweet.herokuapp.com/auth'
-        });
-
-        if (!req.query.error) {
-          res.redirect(authUrl);
-        } else {
-          res.send('access denied');
-        }
-      }
-
-      else {
-        console.log('Oauth successful, the code (whatever it is) is: ', req.query.code);
-        graph.authorize({
-          'client_id':      process.env.FACEBOOK_CLIENT_ID,
-          'redirect_uri':   'https://ng-tweet.herokuapp.com/auth',
-          'client_secret':  process.env.FACEBOOK_CLIENT_SECRET,
-          'code':           req.query.code
-        }, function (err: any, facebookRes: any) {
-          res.redirect('/UserHasLoggedIn');
-        });
-      }
-    });
-
-    this.app.get('/UserHasLoggedIn', function(req, res) {
-      res.send('Logged In');
     });
 
     this.app.get('/messages', (req: Request, res: Response) => {
@@ -171,7 +115,7 @@ export class TweetServer {
 
   private async getHashtags () {
     const docs = await this.db.collection('hashtags')
-      .find({"label":{"$in":["#swaiparis", "#swailapaz", "#swaihongkong", "#swaisydney", "#swaicarthage", "#swaibrussels", "#swaiyaounde", "#swailima", "#swaiistanbul", "#swaitaipei", "#swaimexico", "#swaiantananarivo"]}})
+      .find({'label': {'$in': ['#swaiparis', '#swailapaz', '#swaihongkong', '#swaisydney', '#swaicarthage', '#swaibrussels', '#swaiyaounde', '#swailima', '#swaiistanbul', '#swaitaipei', '#swaimexico', '#swaiantananarivo']}})
       .sort({value: -1})
       .limit(15)
       .toArray();
@@ -198,13 +142,6 @@ export class TweetServer {
       .toArray();
     return res1;
   }
-
-  //private async getMessages () {
-  //  const messageSear = new Message('', 1);
-  //  const repository = new MessageRepository(this.db, 'messages');
-  //  const mess = await repository.find(messageSear);
-  //  return mess[0];
-  //}
 
   private listen(): void {
     this.server.listen(this.port, () => {
