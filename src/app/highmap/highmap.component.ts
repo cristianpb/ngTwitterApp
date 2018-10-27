@@ -251,8 +251,26 @@ export class HighmapComponent implements OnInit {
           ` ${this.point.value} tweets`;
       }
     },
+    responsive: {
+      rules: [{
+        condition: {
+          maxWidth: 600
+        },
+        chartOptions: {
+          chart: {
+            height: 200
+          },
+          subtitle: {
+            text: null
+          },
+          navigator: {
+            enabled: false
+          }
+        }
+      }]
+    },
     series: [{
-      name: 'Random data',
+      name: 'Tweets by city',
       states: {
         hover: {
           color: '#edbb1e'
