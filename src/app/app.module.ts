@@ -14,6 +14,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MessagesComponent } from './messages/messages.component';
 import { NewsComponent } from './news/news.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { HighmapComponent } from './highmap/highmap.component';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { AppRoutingModule } from './/app-routing.module';
     HashtagsComponent,
     MessagesComponent,
     MapsvgComponent,
-    NewsComponent
+    NewsComponent,
+    HighmapComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,8 @@ import { AppRoutingModule } from './/app-routing.module';
     BrowserAnimationsModule,
     MomentModule,
     FontAwesomeModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HighchartsChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]
