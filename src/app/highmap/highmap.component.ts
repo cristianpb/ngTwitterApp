@@ -248,7 +248,7 @@ export class HighmapComponent implements OnInit {
     tooltip: {
       formatter: function () {
         return `<b> ${this.point.name} </b><br>` +
-          ` ${this.point.value} tweets`;
+          `${this.point.value? this.point.value : 0} tweets`;
       }
     },
     responsive: {
@@ -296,8 +296,6 @@ export class HighmapComponent implements OnInit {
     '#swailapaz': 'bo',
     '#swaiparis': 'fr'
   };
-  result;
-
 
   ngOnInit() {
   }
@@ -306,7 +304,6 @@ export class HighmapComponent implements OnInit {
 
     let initial_data = this.data;
     const mydict2 = this.mydict;
-    console.log(this.hashtags);
     this.hashtags.forEach((elem) => {
       const p: any = initial_data.filter(function(el) {
         return (el['hc-key'] !== mydict2[elem.label]);
