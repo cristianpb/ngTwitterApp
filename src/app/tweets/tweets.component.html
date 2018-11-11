@@ -6,7 +6,7 @@
 
 <div class="tile is-ancestor">
   <div class="tile is-one-third is-vertical is-parent">
-      <app-hashtags class="tile is-child" [hashtags]="hashtags"></app-hashtags>
+      <app-hashtags class="tile is-child" [tweets]="tweets" [hashtags]="hashtags"></app-hashtags>
       <app-tweet class="tile is-child" [tweet]="tweets[2]" *ngIf="tweets[2]"></app-tweet>
       <app-tweet class="tile is-child" [tweet]="tweets[5]" *ngIf="tweets[5]"></app-tweet>
   </div>

@@ -22,8 +22,7 @@ export interface MessagePost {
 
 @Injectable()
 export class TwitterService {
-
-  page: number = 0;
+  page = 0;
   constructor(private http: HttpClient) { }
 
   // action(property: 'favorite'|'retweet', id: string, state: boolean) {
@@ -32,6 +31,10 @@ export class TwitterService {
 
   stream() {
     return this.http.get<TwitterResponse>(`${environment.api}/tweets/${this.page}`);
+  }
+
+  tweetsByCity(query) {
+    return this.http.get<TwitterResponse>(`${environment.api}/cities/${query}`);
   }
 
   hashtags() {

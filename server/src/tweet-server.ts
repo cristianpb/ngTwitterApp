@@ -75,6 +75,11 @@ export class TweetServer {
       });
     });
 
+    this.app.get('/api/cities/:city', (req, res) => {
+      this.getTweetsCity(req.params.city, Number(req.params.page), 0).then(( docs ) => {
+        res.json({'data': docs});
+      });
+    });
 
     this.app.get('/api/read', (req, res) => {
       this.getMessages().then(( docs ) => {
@@ -107,6 +112,16 @@ export class TweetServer {
     const start = (page * 9) + (skip * 1);
     const docs = await this.db.collection('tweets')
       .find({}, {skip: start})
+      .sort({twid: -1})
+      .limit(9)
+      .toArray();
+    return docs;
+  }
+
+  private async getTweetsCity (query: string, page: number, skip: number) {
+    const start = (page * 9) + (skip * 1);
+    const docs = await this.db.collection('tweets')
+      .find( { $text: { $search: query } }, {skip: start})
       .sort({twid: -1})
       .limit(9)
       .toArray();
