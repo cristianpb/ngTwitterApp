@@ -298,6 +298,39 @@ export class HighmapComponent implements OnInit {
   };
 
   ngOnInit() {
+    let initial_data = this.data;
+    const mydict2 = this.mydict;
+    this.hashtags.forEach((elem) => {
+      const p: any = initial_data.filter(function(el) {
+        return (el['hc-key'] !== mydict2[elem.label]);
+      });
+      p.push({
+        'hc-key': mydict2[elem.label],
+        'value': elem.value,
+        'label': elem.label
+      });
+      initial_data = p;
+    });
+    this.chartMap.series = [{
+      name: 'Randoiiiiim data',
+      states: {
+        hover: {
+          color: '#edbb1e'
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        format: '{point.name} {point.value}',
+        filter: {
+          property: 'value',
+          operator: '>',
+          value: 0
+        }
+      },
+      allAreas: false,
+      data: initial_data
+    }];
+    this.updateFlag = true;
   }
 
   ngOnChanges(changes: SimpleChanges) {
