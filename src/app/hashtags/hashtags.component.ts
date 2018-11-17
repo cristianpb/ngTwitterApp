@@ -19,7 +19,7 @@ export class HashtagsComponent implements OnInit {
   ngOnInit() { }
 
   getTweetsByCity(tag: string) {
-    this.twitter.tweetsByCity(tag.substr(1)).subscribe((tweets: Tweet[]) => {
+    this.twitter.tweetsByCity(tag.substr(1)).subscribe((tweets) => {
       console.log(tweets.data);
       this.tweetsChange.emit(tweets.data)
     });
