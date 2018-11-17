@@ -8,7 +8,7 @@
       <tbody>
         <tr *ngFor="let tag of hashtags">
           <td>
-            <a (click)="getTweetsByCity()">{{ tag.label }}</a>
+            <a (click)="getTweetsByCity(tag.label)">{{ tag.label }}</a>
           </td>
           <td>
             <progress class="progress is-primary" value="{{ tag.value }}" max="{{ max_hashtags }}"></progress>

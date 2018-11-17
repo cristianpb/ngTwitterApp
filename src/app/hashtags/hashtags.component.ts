@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, Input } from '@angular/core';
 import { Hashtag } from '../hashtag';
 import { Tweet } from '../tweet';
 import { TwitterService } from '../twitter.service';
@@ -10,16 +10,18 @@ import { TwitterService } from '../twitter.service';
 })
 export class HashtagsComponent implements OnInit {
   @Input() hashtags: Hashtag[];
+  @Input() max_hashtags: number;
   @Input() tweets: Tweet[];
+  @Output() tweetsChange = new EventEmitter<Tweet[]>();
 
   constructor(private twitter: TwitterService) {}
 
   ngOnInit() { }
 
-  getTweetsByCity() {
-    this.twitter.tweetsByCity('swaiparis').subscribe(tweets => {
-      this.tweets = tweets.data;
-      console.log(this.tweets);
+  getTweetsByCity(tag: string) {
+    this.twitter.tweetsByCity(tag.substr(1)).subscribe((tweets: Tweet[]) => {
+      console.log(tweets.data);
+      this.tweetsChange.emit(tweets.data)
     });
   }
 
