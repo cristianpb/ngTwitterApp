@@ -6,7 +6,7 @@
 
 <div class="tile is-ancestor">
   <div class="tile is-one-third is-vertical is-parent">
-      <app-hashtags class="tile is-child" [(tweets)]="tweets"  [hashtags]="hashtags" [max_hashtags]="max_hashtags"></app-hashtags>
+      <app-hashtags class="tile is-child" [(tweets)]="tweets" [(query)]="query"  [hashtags]="hashtags" [max_hashtags]="max_hashtags"></app-hashtags>
       <app-tweet class="tile is-child" [tweet]="tweets[2]" *ngIf="tweets[2]"></app-tweet>
       <app-tweet class="tile is-child" [tweet]="tweets[5]" *ngIf="tweets[5]"></app-tweet>
   </div>
@@ -23,8 +23,8 @@
 </div>
 
 <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
-  <a class="pagination-previous" (click)="previousPage()">Previous</a>
-  <a (click)="nextPage()" class="pagination-next">Next page</a>
+  <a class="pagination-previous" [attr.disabled]="currentPage == 0 ? '': null" (click)="previousPage()" >Previous</a>
+  <a (click)="nextPage()" class="pagination-next" [attr.disabled]="tweets.length == 0 ? '': null"  >Next page</a>
   <ul class="pagination-list">
     <li><a class="pagination-link" aria-current="page">{{ currentPage }}</a></li>
   </ul>

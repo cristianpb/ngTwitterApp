@@ -2,22 +2,30 @@
   Cities hashtags
 </h1>
 
-<div class="box">
   <div class="table-container">
     <table class="table is-narrow is-hoverable is-fullwidth table-container">
+      <thead>
+        <tr>
+          <td>
+            <a (click)="getTweetsByCity('#gswai')">GSWAI</a>
+          </td>
+          <td> </td>
+          <td>{{ total_tweets }}
+          </td>
+        </tr>
+      </thead>
       <tbody>
         <tr *ngFor="let tag of hashtags">
-          <td>
+          <td *ngIf="tag.label != '#gswai'">
             <a (click)="getTweetsByCity(tag.label)">{{ tag.label }}</a>
           </td>
-          <td>
+          <td *ngIf="tag.label != '#gswai'">
             <progress class="progress is-primary" value="{{ tag.value }}" max="{{ max_hashtags }}"></progress>
           </td>
-          <td>
+          <td *ngIf="tag.label != '#gswai'">
             {{ tag.value }}
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-</div>

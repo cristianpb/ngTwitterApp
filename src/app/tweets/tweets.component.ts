@@ -16,6 +16,7 @@ export class TweetsComponent implements OnInit, OnDestroy {
   since = '';
   currentPage = 0;
   hashtags: Hashtag[] = [];
+  query: string = 'null';
   max_hashtags = 0;
 
   constructor(private twitter: TwitterService) {}
@@ -36,9 +37,11 @@ export class TweetsComponent implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    this.twitter.page++;
-    this.currentPage++;
-    this.getStream();
+    if (this.tweets.length != 0) {
+      this.twitter.page++;
+      this.currentPage++;
+      this.getStream();
+    }
   }
 
   previousPage() {
@@ -50,7 +53,7 @@ export class TweetsComponent implements OnInit, OnDestroy {
   }
 
   getStream() {
-    this.twitter.stream().subscribe(tweets => {
+    this.twitter.tweetsByCity(this.query).subscribe(tweets => {
       this.tweets = tweets.data;
       // tweets.data.reverse().forEach(tweet => {
       //   if (this.ids.indexOf(tweet.id_str) < 0) {
@@ -74,7 +77,7 @@ export class TweetsComponent implements OnInit, OnDestroy {
     this.twitter.hashtags().subscribe(hashtags => {
       this.hashtags = hashtags.data;
       hashtags.data.forEach(hashtag => {
-        if (hashtag.value > this.max_hashtags) {
+        if (hashtag.value > this.max_hashtags && hashtag.label !== '#gswai') {
             this.max_hashtags = hashtag.value;
         }
       });

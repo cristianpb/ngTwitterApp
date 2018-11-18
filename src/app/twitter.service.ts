@@ -34,7 +34,7 @@ export class TwitterService {
   }
 
   tweetsByCity(query) {
-    return this.http.get<TwitterResponse>(`${environment.api}/cities/${query}`);
+    return this.http.get<TwitterResponse>(`${environment.api}/cities/${query}/${this.page}`);
   }
 
   hashtags() {

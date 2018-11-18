@@ -75,10 +75,16 @@ export class TweetServer {
       });
     });
 
-    this.app.get('/api/cities/:city', (req, res) => {
-      this.getTweetsCity(req.params.city, Number(req.params.page), 0).then(( docs ) => {
-        res.json({'data': docs});
-      });
+    this.app.get('/api/cities/:city/:page', (req, res) => {
+      if (req.params.city === 'null') {
+        this.getTweets(Number(req.params.page), 0).then(( tweets ) => {
+          res.json({'data': tweets});
+        });
+      } else {
+        this.getTweetsCity(req.params.city, Number(req.params.page), 0).then(( docs ) => {
+          res.json({'data': docs});
+        });
+      }
     });
 
     this.app.get('/api/read', (req, res) => {
@@ -130,7 +136,7 @@ export class TweetServer {
 
   private async getHashtags () {
     const docs = await this.db.collection('hashtags')
-      .find({'label': {'$in': ['#swaihk', '#swailima', '#swaiyaounde', '#swailapaz', '#swaibrussels', '#swaitaipei', '#swaimtl', '#swaijeddah', '#swaiantananarivo', '#swaiparis', '#swaiizmir', '#swaiguayaquil', '#swaiszczecin', '#swaibeirut']}})
+      .find({'label': {'$in': ['#gswai', '#swaihk', '#swailima', '#swaiyaounde', '#swailapaz', '#swaibrussels', '#swaitaipei', '#swaimtl', '#swaijeddah', '#swaiantananarivo', '#swaiparis', '#swaiizmir', '#swaiguayaquil', '#swaiszczecin', '#swaibeirut']}})
       .sort({value: -1})
       .limit(15)
       .toArray();
