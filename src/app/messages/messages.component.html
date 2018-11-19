@@ -11,9 +11,16 @@
       </article>
       </div>
     </div>
-    <div class="container">
-      <input class="input" type="text"  #heroName>
-      <a class="button" (click)="add(heroName.value); heroName.value=''">Send</a>
+    <div class="field">
+      <label class="label">Message</label>
+      <div class="control">
+        <textarea class="textarea" placeholder="Textarea"   #heroName></textarea>
+      </div>
+    </div>
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link" (click)="add(heroName.value); heroName.value=''">Submit</button>
+      </div>
     </div>
   </div>
 </section>

@@ -15,7 +15,6 @@ export class MessagesComponent implements OnInit {
 
   ngOnInit() {
     this.getMessageStream();
-    this.timer = setInterval(() => this.getMessageStream(), 6000);
   }
 
   getMessageStream() {
@@ -32,7 +31,9 @@ export class MessagesComponent implements OnInit {
     const newMessage = {message: name};
     console.log(name);
     this.twitter.addMessage(newMessage)
-      .subscribe(message => console.log(message));
+    .subscribe(message => {
+      this.getMessageStream()
+    });
   }
 
 
