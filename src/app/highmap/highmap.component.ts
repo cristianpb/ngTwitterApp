@@ -291,10 +291,20 @@ export class HighmapComponent implements OnInit {
   };
 
   mydict: any = {
-    '#swaiyaounde': 'cm',
-    '#swaiantananarivo': 'mg',
     '#swailapaz': 'bo',
-    '#swaiparis': 'fr'
+    '#swaihk': 'ch',
+    '#swaiyaounde': 'cm',
+    '#swaibrussels': 'br',
+    '#swaiparis': 'fr',
+    '#swaiizmir': 'tr',
+    '#swailima': 'pe',
+    '#swaimtl': 'ca',
+    '#swaitaipei': 'tw',
+    '#swaijeddah': 'sa',
+    '#swaiszczecin': 'po',
+    '#swaibeirut': 'lb',
+    '#swaiguayaquil': 'ec',
+    '#swaiantananarivo': 'mg'
   };
 
   ngOnInit() {
