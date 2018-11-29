@@ -294,7 +294,7 @@ export class HighmapComponent implements OnInit {
     '#swailapaz': 'bo',
     '#swaihk': 'ch',
     '#swaiyaounde': 'cm',
-    '#swaibrussels': 'br',
+    '#swaibrussels': 'be',
     '#swaiparis': 'fr',
     '#swaiizmir': 'tr',
     '#swailima': 'pe',
